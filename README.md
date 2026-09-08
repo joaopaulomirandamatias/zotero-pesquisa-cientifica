@@ -2,7 +2,7 @@
 
 Manual em formato de slides (57) sobre o Zotero 10 para pós-graduação: instalar (programa, Connector, conta e sincronização), capturar (DOI/ISBN, Connector, PDF, importação RIS/BibTeX, «Encontrar texto completo»), organizar (coleções, etiquetas, pesquisas salvas, duplicados), ler e anotar (leitor integrado, destaques, nota a partir das anotações), citar (estilos CSL, estilo ABNT, plugin do Word/LibreOffice/Google Docs, cópia rápida, ZoteroBib), exportar e integrar (BibTeX, RIS, CSL JSON, Better BibTeX, LaTeX/Overleaf, Obsidian, ASReview/Rayyan, backup), colaborar (sincronização, WebDAV, grupos), plugins, erros comuns, checklist, fluxo completo de uma revisão, glossário com popovers e referências. Capturas de tela reais e datadas (08/09/2026) do Zotero 10.0.1 em pt-BR com uma biblioteca de exemplo de artigos de acesso aberto, e do site zotero.org.
 
-**Manual on-line:** https://zotero.mirandastech.com.br/ · **PDF:** https://zotero.mirandastech.com.br/manual.pdf
+**Manual on-line:** https://manual.mirandastech.com.br/zotero/ · **PDF:** https://manual.mirandastech.com.br/zotero/manual.pdf
 
 Manuais irmãos: **Metodologia da pesquisa científica** — https://metodologia.mirandastech.com.br/ · **Uso de IA na pesquisa científica** — https://manual.mirandastech.com.br/
 

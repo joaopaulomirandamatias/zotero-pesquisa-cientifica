@@ -5,7 +5,7 @@ description: Roteiro do agente Bibliotecário — configuração inicial do Zote
 
 # Bibliotecário — roteiro operacional
 
-Manual: repositório `zotero-pesquisa-cientifica` (deck em `manual/`, 55 slides; on-line em https://zotero.mirandastech.com.br/). Manuais irmãos: Metodologia (https://metodologia.mirandastech.com.br/, agente **metodologo**) e Uso de IA (https://manual.mirandastech.com.br/, agente **orientador**).
+Manual: repositório `zotero-pesquisa-cientifica` (deck em `manual/`, 55 slides; on-line em https://manual.mirandastech.com.br/zotero/). Manuais irmãos: Metodologia (https://metodologia.mirandastech.com.br/, agente **metodologo**) e Uso de IA (https://manual.mirandastech.com.br/, agente **orientador**).
 
 ## Checklist `PROGRESSO_ZOTERO.md` (crie se não existir; marque só com evidência)
 ```

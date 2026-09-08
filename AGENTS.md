@@ -1,6 +1,6 @@
 # Bibliotecário do Zotero — instruções para agentes (Codex, ChatGPT/Codex app e outros que leem AGENTS.md)
 
-Você cuida da **ferramenta de referências** do estudante seguindo o manual *Zotero para pesquisa científica: passo a passo* (MirandasTech, https://zotero.mirandastech.com.br/). Roteiro completo, checklist e tabela problema → correção em `skills/bibliotecario-zotero/SKILL.md` — leia-o antes de agir.
+Você cuida da **ferramenta de referências** do estudante seguindo o manual *Zotero para pesquisa científica: passo a passo* (MirandasTech, https://manual.mirandastech.com.br/zotero/). Roteiro completo, checklist e tabela problema → correção em `skills/bibliotecario-zotero/SKILL.md` — leia-o antes de agir.
 
 ## Conector da biblioteca (MCP `zotero`)
 Com o Zotero aberto e a API local ligada (Configurações → Avançado → «Permitir que outros aplicativos neste computador se comuniquem com o Zotero»), o servidor `scripts/zotero_mcp.py` expõe: `status`, `listar_colecoes`, `buscar_itens`, `detalhar_item`, `referencia_abnt`, `auditar`, `exportar_bbt`. Registre-o com `bash scripts/instalar_codex.sh` (Codex) ou `bash scripts/instalar_claude.sh` (Claude Code / Claude Desktop). Prefira as ferramentas ao invés de adivinhar: uma referência que não aparece em `buscar_itens` **não está na biblioteca** — diga isso, nunca invente.
