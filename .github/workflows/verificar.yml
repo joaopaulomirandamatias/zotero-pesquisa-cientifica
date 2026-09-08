@@ -1,0 +1,24 @@
+name: verificar
+on: [push, pull_request]
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Fonte do deck íntegro
+        run: |
+          python3 - <<'PY'
+          import re,os; h=open('manual/fonte_artefato.html',encoding='utf-8').read()
+          for t in ['div','section','span','table','tr','td','ul','ol','li','p','dl','dt','dd','figure','details']:
+              o=len(re.findall(r'<%s[\s>]'%t,h)); c=len(re.findall(r'</%s>'%t,h)); assert o==c,(t,o,c)
+          assert not re.search(r'data-d="[^"]*<span',h); assert 'railway.app' not in h
+          for f in set(re.findall(r'src="capturas/([^"]+)"',h)): assert os.path.exists('capturas/'+f), f
+          print('ok:',len(re.findall(r'<section class="slide',h)),'slides')
+          PY
+      - name: Scripts íntegros
+        run: |
+          python3 -m py_compile scripts/auditar_biblioteca.py
+          bash -n scripts/backup_zotero.sh scripts/exportar_bbt.sh scripts/instalar_skills.sh
+          python3 -c "import xml.dom.minidom,glob; [xml.dom.minidom.parse(f) for f in glob.glob('modelos/estilos/*.csl')]; print('csl ok')"

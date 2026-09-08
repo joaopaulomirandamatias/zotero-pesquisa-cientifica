@@ -1,0 +1,1726 @@
+<meta charset="utf-8">
+<title>MirandasTech · Zotero para pesquisa científica</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+
+:root{
+  --paper:#F1F4F7; --surface:#FFFFFF; --surface-2:#F8FAFB;
+  --ink:#101720; --ink-2:#4A5866; --ink-3:#75828E;
+  --rule:#D3DAE1; --rule-2:#E5EAEF;
+  --blueprint:#17436B; --blueprint-2:#2C6396; --blueprint-soft:#E4EDF5;
+  --signal:#C4530E; --signal-soft:#FBEADD;
+  --go:#186B50; --go-soft:#E0EFE9;
+  --stop:#A0231C; --stop-soft:#F9E5E3;
+  --amber:#8A6000; --amber-soft:#F9EFD6;
+  --shadow:0 1px 2px rgba(16,23,32,.06),0 8px 24px -12px rgba(16,23,32,.18);
+  --serif:'Spectral',Georgia,'Times New Roman',serif;
+  --cond:'IBM Plex Sans Condensed','Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0C1218; --surface:#131B23; --surface-2:#182129;
+    --ink:#E3E9EF; --ink-2:#94A3B1; --ink-3:#71808E;
+    --rule:#26313C; --rule-2:#1E2831;
+    --blueprint:#7DB2DF; --blueprint-2:#A3CAEB; --blueprint-soft:#15283A;
+    --signal:#EE8A46; --signal-soft:#33200F;
+    --go:#54C398; --go-soft:#0F2620;
+    --stop:#EC7B72; --stop-soft:#2D1614;
+    --amber:#DCAC3D; --amber-soft:#2A2110;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0C1218; --surface:#131B23; --surface-2:#182129;
+  --ink:#E3E9EF; --ink-2:#94A3B1; --ink-3:#71808E;
+  --rule:#26313C; --rule-2:#1E2831;
+  --blueprint:#7DB2DF; --blueprint-2:#A3CAEB; --blueprint-soft:#15283A;
+  --signal:#EE8A46; --signal-soft:#33200F;
+  --go:#54C398; --go-soft:#0F2620;
+  --stop:#EC7B72; --stop-soft:#2D1614;
+  --amber:#DCAC3D; --amber-soft:#2A2110;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+:focus-visible{outline:2px solid var(--blueprint-2);outline-offset:3px;border-radius:2px}
+
+/* ---------- sections ---------- */
+.part{padding-top:56px}
+.part-head{display:flex;align-items:baseline;gap:14px;border-top:1px solid var(--rule);padding-top:14px;margin-bottom:8px}
+.part-num{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--signal);font-weight:600}
+.part-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+h2{font-family:var(--cond);font-weight:700;font-size:clamp(27px,3.6vw,38px);line-height:1.12;letter-spacing:-.012em;margin:6px 0 0;text-wrap:balance;max-width:22ch}
+h3{font-family:var(--cond);font-weight:600;font-size:22px;line-height:1.25;margin:40px 0 0;color:var(--ink);text-wrap:balance}
+h4{font-family:var(--cond);font-weight:600;font-size:17px;line-height:1.3;margin:26px 0 0;color:var(--blueprint);letter-spacing:.01em}
+p,ul,ol{max-width:68ch}
+p{margin:14px 0 0}
+ul,ol{margin:14px 0 0;padding-left:22px}
+li{margin:7px 0}
+li::marker{color:var(--blueprint)}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:italic}
+a{color:var(--blueprint);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+code{font-family:var(--mono);font-size:.855em;background:var(--surface-2);border:1px solid var(--rule-2);padding:1px 5px;border-radius:3px;color:var(--ink)}
+.dek{font-size:18px;color:var(--ink-2);max-width:64ch;margin:16px 0 0;line-height:1.6}
+
+/* ---------- blocks ---------- */
+.rule-box,.trap,.case,.note{margin:24px 0 0;padding:16px 20px;border-radius:4px;max-width:74ch;border-left:3px solid}
+.rule-box{background:var(--blueprint-soft);border-left-color:var(--blueprint)}
+.trap{background:var(--signal-soft);border-left-color:var(--signal)}
+.case{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--go)}
+.note{background:var(--surface-2);border-left-color:var(--ink-3)}
+.blabel{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;display:block;margin-bottom:7px}
+.rule-box .blabel{color:var(--blueprint)}
+.trap .blabel{color:var(--signal)}
+.case .blabel{color:var(--go)}
+.note .blabel{color:var(--ink-3)}
+.rule-box p:first-of-type,.trap p:first-of-type,.case p:first-of-type,.note p:first-of-type{margin-top:0}
+.rule-box p,.trap p,.case p,.rule-box li,.trap li,.case li,.note p,.note li{max-width:none;font-size:16px}
+.case .src{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:10px;display:block;line-height:1.5}
+
+/* ---------- figures ---------- */
+figure{margin:34px 0 0;max-width:none}
+figcaption{font-family:var(--cond);font-size:13.5px;color:var(--ink-2);margin-top:11px;line-height:1.5;max-width:76ch}
+figcaption b{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--signal);font-weight:600;margin-right:7px}
+.frame{border:1px solid var(--rule);background:var(--surface);border-radius:4px;padding:24px;overflow-x:auto}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:26px 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-family:var(--cond);font-size:14.5px;min-width:520px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding:11px 14px;border-bottom:1px solid var(--rule);background:var(--surface-2);vertical-align:bottom}
+td{padding:11px 14px;border-bottom:1px solid var(--rule-2);vertical-align:top;line-height:1.45;color:var(--ink)}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
+td.mono{font-family:var(--mono);font-size:12.5px}
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;font-weight:600;text-transform:uppercase;padding:2.5px 8px;border-radius:20px;white-space:nowrap}
+.p-go{background:var(--go-soft);color:var(--go)}
+.p-amber{background:var(--amber-soft);color:var(--amber)}
+.p-stop{background:var(--stop-soft);color:var(--stop)}
+.p-blue{background:var(--blueprint-soft);color:var(--blueprint)}
+
+/* ---------- terminal ---------- */
+.term{background:#0B1219;border:1px solid #223040;border-radius:5px;overflow:hidden;margin:26px 0 0}
+.term-bar{display:flex;align-items:center;gap:7px;padding:8px 13px;background:#141F2B;border-bottom:1px solid #223040}
+.term-dot{width:9px;height:9px;border-radius:50%;background:#33445A}
+.term-title{font-family:var(--mono);font-size:10.5px;color:#7A8B9C;margin-left:8px;letter-spacing:.05em}
+.term pre{margin:0;padding:15px 16px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.62;color:#C9D6E2}
+.term .c-p{color:#5FA8DC}
+.term .c-o{color:#E8A055}
+.term .c-g{color:#5FC79A}
+.term .c-m{color:#71828F}
+.term .c-r{color:#E8776C}
+
+/* ---------- code ---------- */
+.code{background:var(--surface-2);border:1px solid var(--rule);border-radius:4px;margin:24px 0 0;overflow:hidden}
+.code-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);padding:8px 14px;border-bottom:1px solid var(--rule);background:var(--surface)}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.66;color:var(--ink)}
+.code .k{color:var(--blueprint);font-weight:500}
+.code .s{color:var(--go)}
+.code .cm{color:var(--ink-3);font-style:italic}
+
+/* ---------- charts ---------- */
+.bars{display:flex;flex-direction:column;gap:11px;margin:0}
+.bar-row{display:grid;grid-template-columns:minmax(96px,152px) minmax(0,1fr) 62px;gap:12px;align-items:center}
+.bar-lab{font-family:var(--cond);font-size:13.5px;color:var(--ink-2);line-height:1.25;text-align:right}
+.bar-track{background:var(--rule-2);border-radius:2px;height:22px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;background:var(--blueprint)}
+.bar-fill.f-signal{background:var(--signal)}
+.bar-fill.f-go{background:var(--go)}
+.bar-fill.f-stop{background:var(--stop)}
+.bar-fill.f-amber{background:var(--amber)}
+.bar-fill.f-mute{background:var(--ink-3)}
+.bar-val{font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink);text-align:right;font-weight:500}
+.bar-zero{font-family:var(--mono);font-size:11px;color:var(--stop);font-weight:600;position:absolute;left:4px;top:50%;transform:translateY(-50%)}
+@media (max-width:560px){.bar-row{grid-template-columns:minmax(72px,102px) minmax(0,1fr) 52px;gap:8px}.bar-lab{font-size:12px}}
+
+/* funnel */
+.funnel{display:flex;flex-direction:column;gap:8px;align-items:center}
+.fstep{border:1px solid var(--rule);background:var(--surface-2);border-radius:4px;padding:12px 18px;text-align:center;width:100%;max-width:640px;position:relative}
+.fstep .fn{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.fstep .ft{font-family:var(--cond);font-size:13.5px;color:var(--ink-2);margin-top:5px;line-height:1.35}
+.fstep.hl{border-color:var(--signal);background:var(--signal-soft)}
+.fstep.hl .fn{color:var(--signal)}
+.fdrop{font-family:var(--mono);font-size:11.5px;color:var(--stop);text-align:center;line-height:1.4}
+
+/* flow map */
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:10px}
+.node{border:1px solid var(--rule);border-radius:4px;background:var(--surface-2);padding:12px 13px;display:flex;flex-direction:column;gap:6px}
+.node .nn{font-family:var(--mono);font-size:10px;letter-spacing:.11em;color:var(--ink-3);font-weight:600}
+.node .nt{font-family:var(--cond);font-size:15px;font-weight:600;line-height:1.22;color:var(--ink)}
+.node .nd{font-size:13px;color:var(--ink-2);line-height:1.45;font-family:var(--cond)}
+.node .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.node.gate{border-color:var(--stop);background:var(--stop-soft)}
+.node.gate .nn{color:var(--stop)}
+
+/* two-column compare */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);border-radius:4px;overflow:hidden;background:var(--surface)}
+.compare>div{padding:18px 20px}
+.compare>div:first-child{border-right:1px solid var(--rule)}
+.cmp-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+.compare ul{margin:0;padding-left:18px;max-width:none}
+.compare li{font-family:var(--cond);font-size:14.5px;line-height:1.45;margin:8px 0;color:var(--ink)}
+@media (max-width:640px){.compare{grid-template-columns:1fr}.compare>div:first-child{border-right:0;border-bottom:1px solid var(--rule)}}
+
+/* ui schematic */
+.ui{border:1px solid var(--rule);border-radius:5px;overflow:hidden;background:var(--surface);font-family:var(--cond)}
+.ui-bar{background:var(--surface-2);border-bottom:1px solid var(--rule);padding:7px 12px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.06em;display:flex;justify-content:space-between;align-items:center}
+.ui-body{display:grid;grid-template-columns:170px minmax(0,1fr);min-height:150px}
+.ui-side{border-right:1px solid var(--rule);padding:10px;background:var(--surface-2);font-size:13px;color:var(--ink-2)}
+.ui-side div{padding:3.5px 6px;border-radius:3px;line-height:1.3}
+.ui-side div.sel{background:var(--blueprint-soft);color:var(--blueprint);font-weight:600}
+.ui-main{padding:10px}
+.ui-row{display:grid;grid-template-columns:minmax(0,1fr) 78px 46px;gap:9px;padding:6px 7px;border-bottom:1px solid var(--rule-2);font-size:13px;align-items:center;color:var(--ink)}
+.ui-row.head{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--rule)}
+.ui-row span:nth-child(2),.ui-row span:nth-child(3){font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+.schematic-tag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border:1px dashed var(--rule);padding:2px 7px;border-radius:3px}
+@media (max-width:560px){.ui-body{grid-template-columns:1fr}.ui-side{border-right:0;border-bottom:1px solid var(--rule)}}
+
+/* checklist */
+.check{border:1px solid var(--rule);border-radius:4px;background:var(--surface);overflow:hidden}
+.check-item{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;border-bottom:1px solid var(--rule-2)}
+.check-item:last-child{border-bottom:0}
+.check-item input{margin:4px 0 0;width:16px;height:16px;accent-color:var(--blueprint);flex:none;cursor:pointer}
+.check-item label{font-family:var(--cond);font-size:14.5px;line-height:1.45;cursor:pointer;color:var(--ink)}
+.check-item label b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:2px}
+.check-item.done label{color:var(--ink-3);text-decoration:line-through}
+.check-foot{padding:10px 16px;background:var(--surface-2);border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink-3);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.check-foot button{font-family:var(--mono);font-size:10.5px;background:none;border:1px solid var(--rule);color:var(--ink-2);padding:3px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em}
+.check-foot button:hover{border-color:var(--blueprint);color:var(--blueprint)}
+
+/* refs */
+.refs{margin:14px 0 0;padding-left:30px;list-style:decimal;max-width:none}
+.refs li{display:list-item;padding:6px 0 6px 4px;border-bottom:1px solid var(--rule-2);margin:0;font-family:var(--cond);font-size:13.5px;line-height:1.4}
+.refs li::marker{font-family:var(--mono);font-size:11px;color:var(--signal);font-weight:600}
+.refs li a{overflow-wrap:anywhere;font-family:var(--mono);font-size:11px;display:inline-block;margin-top:2px;color:var(--ink-3);text-decoration:none}
+.refs li a:hover{color:var(--blueprint);text-decoration:underline}
+.refs .rt{color:var(--ink);font-weight:500}
+
+.colophon{margin-top:70px;padding-top:22px;border-top:3px solid var(--blueprint);font-family:var(--mono);font-size:11.5px;color:var(--ink-3);line-height:1.75}
+.kicker{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin:36px 0 0;display:block;font-weight:600}
+
+
+
+/* ================= motor de slides ================= */
+html{scroll-snap-type:y proximity;scroll-behavior:smooth}
+body{margin:0}
+.slide{height:100vh;min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:flex-start;padding:26px clamp(64px,6vw,96px) 26px;font-size:15.5px;overflow:hidden;position:relative;border-bottom:1px solid var(--rule-2);background:var(--paper)}
+.slide.alt{background:var(--surface-2)}
+.slide .inner{max-width:none;width:100%;margin:0;max-height:calc(100vh - 52px);overflow:auto;scrollbar-width:thin}
+.slide.fit .inner{overflow:visible}
+.slide h2{max-width:none;font-size:clamp(24px,3.2vw,38px);margin-top:6px}
+.slide .lead{font-size:clamp(15.5px,1.35vw,18px);color:var(--ink-2);max-width:none;margin:10px 0 0;line-height:1.5}
+.slide p,.slide ul,.slide ol,.slide .rule-box,.slide .trap,.slide .case,.slide .note,.slide .more,.slide figcaption,.slide .check,.slide .refs,.slide h2{max-width:none}
+.two{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(16px,2.4vw,34px);align-items:start;margin-top:16px}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.two figure,.two .tw,.two .code,.two .term{margin-top:0}
+.kicker-part{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);font-weight:600}
+.kicker-part span{color:var(--ink-3);font-weight:400;margin-left:10px}
+.more{margin-top:16px;max-width:76ch;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
+.more summary{cursor:pointer;font-family:var(--cond);font-weight:600;font-size:14px;padding:10px 14px;color:var(--blueprint);list-style:none;display:flex;align-items:center;gap:8px}
+.more summary::before{content:"+";font-family:var(--mono);width:16px;display:inline-block;text-align:center}
+.more[open] summary::before{content:"–"}
+.more>div{padding:0 16px 14px;font-size:15.5px}
+.more>div p,.more>div li{max-width:none;font-size:15.5px}
+.more .tw{margin-top:10px}
+.bul{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-direction:column;gap:9px}
+.bul li{position:relative;padding-left:24px;font-size:15.5px;line-height:1.5;margin:0}
+.bul li::before{content:"";position:absolute;left:4px;top:9px;width:10px;height:10px;border-radius:2px;background:var(--blueprint)}
+.bul li.warn::before{background:var(--signal)}
+.bul li.stop::before{background:var(--stop)}
+.bul li.go::before{background:var(--go)}
+
+/* capa */
+.slide.cover{justify-content:center;background:var(--paper)}
+.slide.divider{justify-content:center}
+.brand{font-family:var(--cond);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--blueprint);display:inline-flex;align-items:center;gap:10px}
+.brand::before{content:"";width:22px;height:2px;background:var(--signal)}
+.cover h1{font-family:var(--cond);font-weight:700;font-size:clamp(42px,7.2vw,88px);line-height:.98;letter-spacing:-.02em;margin:22px 0 0;text-wrap:balance;max-width:none}
+.cover .lede{font-size:clamp(18px,1.9vw,23px);color:var(--ink-2);max-width:none;margin:22px 0 0;line-height:1.55}
+.cover-meta{margin-top:34px;display:flex;flex-wrap:wrap;gap:24px 40px;font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.04em}
+.cover-meta b{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;font-weight:600}
+.cover-meta span{font-family:var(--cond);font-size:15px;color:var(--ink);letter-spacing:0}
+.hint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:8px}
+.hint::after{content:"↓";animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* separador de parte */
+.slide.divider{justify-content:center;background:var(--blueprint);color:#F1F4F7;border-bottom:0}
+.slide.divider .kicker-part{color:#F4B07A}
+.slide.divider .kicker-part span{color:rgba(241,244,247,.6)}
+.slide.divider h2{color:#FFFFFF;font-size:clamp(40px,6vw,74px);max-width:none}
+.slide.divider p{color:rgba(241,244,247,.82);font-size:clamp(17px,1.7vw,21px);max-width:none}
+.slide.divider .num{font-family:var(--mono);font-size:clamp(90px,16vw,200px);font-weight:600;color:rgba(255,255,255,.08);position:absolute;right:4vw;bottom:-2vw;line-height:1;letter-spacing:-.04em;pointer-events:none}
+
+/* barra fixa, progresso, navegação */
+.topbar{position:fixed;top:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(14px,3vw,28px);background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);z-index:40}
+.topbar .brand{font-size:12px}
+.topbar .where{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.06em;display:flex;align-items:center;gap:12px}
+.topbar .where b{color:var(--ink);font-weight:600}
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--signal);width:0;z-index:41;transition:width .25s ease}
+.navbtn{position:fixed;left:clamp(8px,1.2vw,18px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;z-index:40;align-items:center;opacity:.28;transition:opacity .25s ease}
+.navbtn:hover,.navbtn:focus-within{opacity:1}
+@media (hover:none){.navbtn{opacity:.85}}
+.navbtn .cnt{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-top:2px}
+.navbtn .cnt b{color:var(--ink)}
+.navbtn button,.menubtn{font-family:var(--mono);font-size:13px;width:42px;height:42px;border-radius:4px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer;box-shadow:var(--shadow);display:inline-flex;align-items:center;justify-content:center}
+.navbtn button:hover,.menubtn:hover{border-color:var(--blueprint);color:var(--blueprint)}
+.menubtn{font-size:16px}
+.menu{position:fixed;inset:0 auto 0 0;width:min(360px,92vw);background:var(--surface);border-right:1px solid var(--rule);box-shadow:var(--shadow);z-index:45;overflow-y:auto;padding:14px 10px 40px;transform:translateX(-102%);transition:transform .28s ease}
+.menu.open{transform:none}
+.menu .grp{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:14px 10px 4px;border-top:1px solid var(--rule-2);margin-top:6px}
+.menu .grp:first-child{border-top:0;margin-top:0}
+.menu a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink-2);font-family:var(--cond);font-size:14px;padding:6px 10px;border-radius:3px;border-left:2px solid transparent}
+.menu a .n{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);min-width:20px;font-variant-numeric:tabular-nums}
+.menu a:hover{background:var(--blueprint-soft);color:var(--ink)}
+.menu a.on{border-left-color:var(--blueprint);color:var(--blueprint);background:var(--blueprint-soft);font-weight:600}
+.scrim{position:fixed;inset:0;background:rgba(16,23,32,.25);z-index:44;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.on{opacity:1;pointer-events:auto}
+
+/* efeitos de entrada — estado de repouso legível; só deslocamento e leve fade */
+.rv{transform:translateY(16px);opacity:.55;transition:transform .55s cubic-bezier(.2,.7,.2,1),opacity .55s ease}
+.slide.in .rv{transform:none;opacity:1}
+.slide.in .rv:nth-child(2){transition-delay:.06s}.slide.in .rv:nth-child(3){transition-delay:.12s}.slide.in .rv:nth-child(4){transition-delay:.18s}.slide.in .rv:nth-child(5){transition-delay:.24s}.slide.in .rv:nth-child(6){transition-delay:.30s}
+.slide.cover .rv{transform:none;opacity:1}
+@media (prefers-reduced-motion:reduce){.rv{transform:none;opacity:1;transition:none}.hint::after{animation:none}.prog{transition:none}.menu{transition:none}}
+
+/* figuras leves */
+.shot{border:1px solid var(--rule);border-radius:5px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.shot img{display:block;width:100%;height:auto}
+.sets{position:relative;height:250px;max-width:520px;margin:0 auto;font-family:var(--cond)}
+.sets div{position:absolute;border-radius:50%;border:1.5px solid var(--rule);display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;font-size:13px;color:var(--ink-2);text-align:center;line-height:1.3}
+.sets .s1{inset:0;background:var(--surface-2)}
+.sets .s2{inset:12% 15% 8% 15%;background:var(--amber-soft);border-color:var(--amber)}
+.sets .s3{inset:38% 32% 14% 32%;background:var(--signal-soft);border-color:var(--signal);align-items:center;padding:0;font-weight:600;color:var(--signal)}
+.dec{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:20px}
+.dec div{border:1px solid var(--rule);border-radius:4px;padding:12px 14px;background:var(--surface)}
+.dec b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:6px}
+.dec .h{border-left:3px solid var(--stop)}.dec .h b{color:var(--stop)}
+.dec .p{border-left:3px solid var(--amber)}.dec .p b{color:var(--amber)}
+.dec .m{border-left:3px solid var(--go)}.dec .m b{color:var(--go)}
+.dec ul{margin:0;padding-left:16px;max-width:none}
+.dec li{font-family:var(--cond);font-size:14px;line-height:1.4;margin:4px 0}
+
+/* impressão: um slide por página */
+@page{size:A4 landscape;margin:12mm}
+@media print{
+  html{scroll-snap-type:none}
+  body{background:#fff;color:#101720}
+  .prog,.navbtn,.menubtn,.menu,.scrim,.hint{display:none!important}
+  .slide{min-height:0;height:auto;break-after:page;padding:8mm 4mm;border:0;justify-content:flex-start;overflow:visible}
+  .slide .inner{max-height:none;overflow:visible;zoom:1!important}
+  .slide.divider{background:#17436B!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rv{transform:none;opacity:1}
+  .more{display:block}.more>div{display:block}
+  .term{background:#0B1219!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rule-box,.trap,.case,.note,.pill,.bar-fill,.bar-track,.node,.dec div,.sets div{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .code pre,.term pre{white-space:pre-wrap;word-break:break-word}
+  a{color:inherit;text-decoration:none}
+}
+
+/* limites de altura: um slide por tela */
+.slide .tw{max-height:none;overflow:auto}
+.slide .tw table{font-size:13.5px}
+.slide .tw td,.slide .tw th{padding:8px 11px}
+.slide figure{margin-top:14px}
+.slide .shot img{max-height:34vh;width:auto;max-width:100%;margin:0 auto}
+.slide .code pre,.slide .term pre{max-height:none;overflow:auto;font-size:12px}
+.slide .rule-box,.slide .trap,.slide .case,.slide .note{margin-top:14px;padding:12px 16px}
+.slide .rule-box p,.slide .trap p,.slide .case p,.slide .note p{font-size:14.5px}
+.slide ol,.slide ul{margin-top:10px}
+.slide li{margin:5px 0;font-size:15px}
+.slide h4{margin-top:14px}
+.slide .check{max-height:none}
+.slide .refs{max-height:none}
+.slide .refs li{font-size:13px;padding:6px 0 6px 4px}
+.slide figcaption{font-size:12.5px;margin-top:8px}
+.slide .dec ul{padding-left:14px}.slide .dec li{font-size:13.5px}
+.slide .frame{padding:16px}
+.slide .sets{height:210px}
+@media (max-height:760px){.slide .shot img{max-height:30vh}}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.three figure{margin:0}
+.three .shot img{max-height:none}
+@media (max-width:900px){.three{grid-template-columns:1fr}}
+.slide .node{padding:9px 11px;gap:4px}.slide .node .nt{font-size:14px}.slide .node .nd{font-size:12px}
+
+/* ================= celular e tablet ================= */
+@media (max-width:900px){
+  html{scroll-snap-type:none}
+  .slide{height:auto;min-height:0;overflow:visible;padding:26px 16px 30px;scroll-snap-align:none;font-size:15px}
+  .slide .inner{max-height:none;overflow:visible;zoom:1!important}
+  .slide.cover,.slide.divider{min-height:72vh;padding:40px 18px}
+  .cover h1{font-size:clamp(38px,11vw,60px)}
+  .cover .lede{font-size:17px}
+  .cover-meta{gap:14px 24px}
+  .hint{display:none}
+  .slide h2{font-size:clamp(23px,6.4vw,30px)}
+  .slide .lead{font-size:15.5px}
+  .kicker-part span{display:block;margin-left:0;margin-top:2px}
+  .two,.three{grid-template-columns:minmax(0,1fr);gap:14px}
+  .slide{max-width:100vw;overflow-x:hidden}
+  .slide .inner{min-width:0}
+  .two>*,.three>*{min-width:0}
+  .slide .tw{max-height:none}
+  .slide .tw table{min-width:560px;font-size:13px}
+  .slide .shot img{max-height:none}
+  .slide .code pre,.slide .term pre{max-height:none;font-size:11.5px}
+  .slide .refs,.slide .check{max-height:none}
+  .compare{grid-template-columns:minmax(0,1fr)}.compare>div:first-child{border-right:0;border-bottom:1px solid var(--rule)}
+  .dec{grid-template-columns:minmax(0,1fr)}
+  .flow{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+  .sets{height:200px}
+  .navbtn{left:auto;right:10px;top:auto;bottom:10px;transform:none;flex-direction:row;gap:6px;padding:6px;background:color-mix(in srgb,var(--surface) 92%,transparent);border:1px solid var(--rule);border-radius:6px;box-shadow:var(--shadow)}
+  .navbtn button,.menubtn{width:38px;height:38px;box-shadow:none}
+  .navbtn .cnt{margin:0 4px 0 2px}
+  .menu{width:100vw;inset:0 0 0 0}
+  .slide.divider .num{font-size:24vw;right:2vw;bottom:-3vw}
+  .rule-box,.trap,.case,.note{padding:12px 14px}
+}
+@media (max-width:480px){
+  .slide{padding:22px 12px 26px}
+  .plate div,.cover-meta div{width:100%}
+  .bar-row{grid-template-columns:minmax(64px,90px) minmax(0,1fr) 46px;gap:6px}
+  .ui-body{grid-template-columns:1fr}.ui-side{border-right:0;border-bottom:1px solid var(--rule)}
+}
+.gl4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:14px}
+.gl{column-count:1}
+.gl{margin:0;font-family:var(--cond);font-size:12.5px;line-height:1.38;columns:2;column-gap:18px}
+.gl dt{break-inside:avoid}.gl dd{break-inside:avoid}
+@media (max-width:640px){.gl{columns:1}}
+.gl dt{font-weight:600;color:var(--blueprint);margin-top:7px}
+.gl dd{margin:1px 0 0;color:var(--ink-2)}
+
+@media (max-width:640px){.gl4{grid-template-columns:minmax(0,1fr)}}
+.menu-head{display:flex;justify-content:space-between;align-items:center;padding:8px 10px 10px;border-bottom:1px solid var(--rule);margin-bottom:6px}
+.menu-head button{font-family:var(--mono);font-size:20px;line-height:1;width:34px;height:34px;border:1px solid var(--rule);border-radius:4px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.menu-head button:hover{border-color:var(--blueprint);color:var(--blueprint)}
+.modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:4vh 4vw;background:rgba(16,23,32,.45)}
+.modal.on{display:flex}
+.modal-box{background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:6px;box-shadow:var(--shadow);max-width:1100px;width:100%;max-height:92vh;display:flex;flex-direction:column}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--rule);font-family:var(--cond);font-weight:600;font-size:15px;color:var(--blueprint)}
+.modal-head button{font-family:var(--mono);font-size:20px;line-height:1;width:34px;height:34px;border:1px solid var(--rule);border-radius:4px;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.modal-body{padding:14px 18px 20px;overflow:auto;font-size:15px}
+.modal-body p,.modal-body li{max-width:none;font-size:15px}
+.modal-body .tw{margin-top:10px}.modal-body .two{margin-top:8px}
+.modal-body .shot img{max-height:60vh;width:auto;max-width:100%}
+/* 4) botão de copiar */
+.code,.term{position:relative}
+.copy{position:absolute;top:6px;right:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:3px 8px;border-radius:3px;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);cursor:pointer;opacity:.75;z-index:2}
+.copy:hover{opacity:1;border-color:var(--blueprint);color:var(--blueprint)}
+.term .copy{background:#141F2B;border-color:#2B3B4C;color:#9FB1C2}
+.copy.ok{color:var(--go);border-color:var(--go)}
+.gterm{text-decoration:underline dotted var(--blueprint-2);text-decoration-thickness:1.5px;text-underline-offset:3px;cursor:help}
+.gterm:hover,.gterm:focus{background:var(--blueprint-soft);outline:none;border-radius:2px}
+.gpop{position:fixed;z-index:70;max-width:340px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-left:3px solid var(--blueprint);border-radius:4px;box-shadow:var(--shadow);padding:10px 12px;font-family:var(--cond);font-size:13.5px;line-height:1.45;display:none;pointer-events:none}
+.gpop.on{display:block}
+.gpop b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--blueprint);margin-bottom:4px}
+@media (hover:none){.gpop{pointer-events:auto}}
+.slide .check{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.slide .check .check-foot{grid-column:1/-1}
+.slide .check-item{border-right:1px solid var(--rule-2)}.slide .check-item:nth-child(even){border-right:0}
+.slide .refs{columns:2;column-gap:28px}.slide .refs li{break-inside:avoid}
+#s06 .tw td,#s06 .tw th{padding:6px 10px}
+@media (max-width:900px){.slide .check{grid-template-columns:minmax(0,1fr)}.slide .check-item{border-right:0}.slide .refs{columns:1}}
+
+/* extras deste manual */
+.gantt{display:grid;grid-template-columns:150px repeat(12,minmax(0,1fr));gap:4px 0;font-family:var(--cond);font-size:12.5px;align-items:center}
+.gantt .gl{padding-right:8px;color:var(--ink-2);text-align:right}
+.gantt .gm{font-family:var(--mono);font-size:10px;color:var(--ink-3);text-align:center;border-bottom:1px solid var(--rule);padding-bottom:3px}
+.gantt .gb{height:14px;border-radius:2px;background:var(--blueprint);margin:3px 1px}
+.gantt .gb.s{background:var(--signal)}.gantt .gb.g{background:var(--go)}.gantt .gb.a{background:var(--amber)}
+.cycle{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.cycle .node{align-items:center;text-align:center}
+.struct{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.struct>div{border:1px solid var(--rule);border-radius:4px;background:var(--surface);padding:10px 12px}
+.struct h5{margin:0 0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--blueprint)}
+.struct ol,.struct ul{margin:0;padding-left:16px}.struct li{font-family:var(--cond);font-size:13px;line-height:1.35;margin:2px 0}
+@media (max-width:900px){.struct{grid-template-columns:minmax(0,1fr)}.gantt{grid-template-columns:110px repeat(12,minmax(0,1fr))}}
+</style>
+<div class="prog" id="prog"></div>
+<div class="scrim" id="scrim"></div>
+<div class="gpop" id="gpop" role="tooltip"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modal-box"><div class="modal-head"><span id="modal-title">detalhes</span><button type="button" id="modal-close" aria-label="Fechar">×</button></div><div class="modal-body" id="modal-body"></div></div></div>
+<nav class="menu" id="menu" aria-label="Sumário"><div class="menu-head"><span class="brand">MirandasTech</span><button type="button" id="menuclose" aria-label="Fechar sumário">×</button></div><div id="menulist"></div></nav>
+<div class="navbtn"><button class="menubtn" id="menubtn" aria-label="Abrir sumário">☰</button><button id="prev" aria-label="Slide anterior">↑</button><button id="next" aria-label="Próximo slide">↓</button><span class="cnt"><b id="cur">1</b>/<span id="tot">–</span></span></div>
+
+
+<main id="deck">
+<!-- ===================== CAPA ===================== -->
+<section class="slide cover" id="s00" data-title="Capa">
+  <div class="inner">
+    <span class="brand rv">MirandasTech · Manual profissional</span>
+    <h1 class="rv">Zotero para pesquisa científica: passo a passo</h1>
+    <p class="lede rv">Instalar, capturar, organizar, ler, citar, exportar e colaborar — com o gerenciador de referências livre que mantém texto e lista de referências <strong>sincronizados até a última versão</strong>.</p>
+    <div class="cover-meta rv">
+      <div><b>Série</b><span>Manuais MirandasTech · ferramentas de pesquisa</span></div>
+      <div><b>Versão</b><span>1.0 · setembro de 2026</span></div>
+      <div><b>Formato</b><span><span id="nslides">–</span> slides</span></div>
+      <div><b>Licença</b><span>CC BY 4.0 — cite a fonte</span></div>
+    </div>
+  </div>
+  <div class="hint">role para começar</div>
+</section>
+
+<section class="slide" id="s01" data-title="Para quem é e o que você vai aprender">
+  <div class="inner">
+    <div class="kicker-part rv">Como usar<span>cada slide é um passo que você executa na tela</span></div>
+    <h2 class="rv">Para quem é — e o que você vai saber fazer ao final</h2>
+    <p class="lead rv">Este manual é para quem escreve trabalhos com muitas referências — artigo, dissertação, tese, revisão sistemática — e ainda guarda PDFs em pastas e digita a lista de referências à mão. Não exige conhecimento prévio: começa na instalação e termina com o fluxo completo de uma revisão.</p>
+    <div class="two rv">
+      <div>
+        <h4>Ao final, você vai conseguir</h4>
+        <ul class="bul">
+          <li><strong>Capturar</strong> qualquer referência com um clique, por <span class="gterm" tabindex="0" data-t="DOI" data-d="Digital Object Identifier: identificador persistente de um documento; resolve em doi.org e na Crossref.">DOI</span> ou a partir de um PDF.</li>
+          <li><strong>Organizar</strong> centenas de itens em coleções, etiquetas e pesquisas salvas — sem duplicatas.</li>
+          <li><strong>Ler e anotar</strong> no leitor integrado e transformar destaques em notas citáveis.</li>
+          <li><strong>Citar</strong> no Word, LibreOffice ou Google Docs no estilo ABNT, com a lista gerada sozinha.</li>
+          <li><strong>Exportar</strong> para LaTeX, Obsidian, ASReview e Rayyan; <strong>colaborar</strong> em bibliotecas de <span class="gterm" tabindex="0" data-t="Grupo" data-d="Biblioteca compartilhada com membros, papéis e permissões; privado ou público.">grupo</span>.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Todo passo aparece com o caminho de menu exato e uma captura de tela da versão atual (Zotero 10). Os nomes de menu estão em português, conforme a interface em pt-BR.</p></div>
+        <div class="trap"><span class="blabel">Armadilha</span><p>O que a regra evita: o erro que quase sempre parece economia de tempo — copiar uma referência à mão, salvar um PDF sem <span class="gterm" tabindex="0" data-t="Item pai · anexo" data-d="O registro bibliográfico; o arquivo (PDF, EPUB, página salva) ou link ligado a ele. Anexo sem pai não é citável.">item pai</span>, editar a lista final no Word.</p></div>
+        <div class="note"><span class="blabel">Manuais irmãos</span><p>Este manual cuida da <em>ferramenta</em>. O que decidir em cada etapa da pesquisa está em <a href="https://metodologia.mirandastech.com.br/">Metodologia da pesquisa científica</a>; o que delegar à inteligência artificial, em <a href="https://manual.mirandastech.com.br/">Uso de IA na pesquisa científica</a>. Termos sublinhados abrem a definição do glossário.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s02" data-title="Por que um gerenciador de referências">
+  <div class="inner">
+    <div class="kicker-part rv">Introdução<span>1 de 2</span></div>
+    <h2 class="rv">Por que um gerenciador de referências</h2>
+    <p class="lead rv">«Salvar o PDF na pasta» funciona até a vigésima referência. Depois disso, cada mudança de estilo, cada obra acrescentada, cada correção de autor vira retrabalho manual — e a lista final deixa de bater com o texto.</p>
+    <div class="compare rv">
+      <div><div class="cmp-h" style="color:var(--stop)">Pasta de PDFs + lista digitada</div><ul>
+        <li>Metadados vivem no nome do arquivo: «artigo_final_v3.pdf».</li>
+        <li>Cada citação é digitada; cada mudança de estilo é refeita à mão.</li>
+        <li>Texto e lista se dessincronizam na primeira revisão.</li>
+        <li>Anotações ficam presas no PDF, sem busca.</li>
+        <li>Não há como compartilhar a base com o coautor.</li>
+      </ul></div>
+      <div><div class="cmp-h" style="color:var(--go)">Gerenciador de referências</div><ul>
+        <li>Cada obra é um <strong><span class="gterm" tabindex="0" data-t="Item" data-d="O registro de uma obra no Zotero: tipo, metadados, anexos, notas, etiquetas e relações.">item</span></strong> com metadados, PDF, notas e etiquetas.</li>
+        <li>A citação entra no texto pelo <span class="gterm" tabindex="0" data-t="Plugin" data-d="Extensão instalada no programa (arquivo .xpi); tem acesso total à biblioteca e ao computador.">plugin</span>; a lista é gerada e regenerada sozinha.</li>
+        <li>Trocar de estilo (ABNT → APA) é um clique — o documento inteiro se atualiza.</li>
+        <li>Destaques e notas são pesquisáveis e citáveis.</li>
+        <li>Biblioteca sincronizada e compartilhável em <span class="gterm" tabindex="0" data-t="Grupo" data-d="Biblioteca compartilhada com membros, papéis e permissões; privado ou público.">grupo</span>.</li>
+      </ul></div>
+    </div>
+    <div class="rule-box rv"><span class="blabel">Regra</span><p>A lista de referências <strong>nunca é editada à mão</strong> no documento final. Corrige-se o <span class="gterm" tabindex="0" data-t="Item" data-d="O registro de uma obra no Zotero: tipo, metadados, anexos, notas, etiquetas e relações.">item</span> no gerenciador e regenera-se. Este é o princípio que justifica todo o resto do manual.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="s03" data-title="O que é o Zotero">
+  <div class="inner">
+    <div class="kicker-part rv">Introdução<span>2 de 2 · verificado em 08/09/2026</span></div>
+    <h2 class="rv">O que é o Zotero</h2>
+    <p class="lead rv">Software livre e de código aberto para coletar, organizar, anotar, citar e compartilhar referências, mantido pela Corporation for Digital Scholarship, organização sem fins lucrativos. Não há versão paga do programa: cobra-se apenas o armazenamento de arquivos na nuvem, e mesmo esse é opcional.</p>
+    <div class="two rv">
+      <div class="tw"><table><thead><tr><th style="width:150px">Fato</th><th>Estado atual</th></tr></thead><tbody>
+        <tr><td><b>Versão atual</b></td><td>Zotero 10.0.1 (24 ago. 2026). Desde janeiro de 2026 o ciclo é mais curto: 8 (jan.), 9 (abr.), 10 (ago.)</td></tr>
+        <tr><td><b>Licença</b></td><td>Livre e de código aberto (AGPL); código em github.com/zotero</td></tr>
+        <tr><td><b>Computador</b></td><td>Windows 10 ou superior · macOS 10.15 ou superior · Linux (64 bits, ARM64)</td></tr>
+        <tr><td><b>Celular e tablet</b></td><td>Aplicativos para iOS e Android</td></tr>
+        <tr><td><b>Navegador</b></td><td>Zotero <span class="gterm" tabindex="0" data-t="Connector" data-d="Extensão do navegador que reconhece a página e envia metadados e PDF ao programa.">Connector</span> para Chrome, Firefox, Edge e Safari</td></tr>
+        <tr><td><b>Editores de texto</b></td><td>Word (Windows 2010–2024/365; Mac 2016–2024/365), LibreOffice 5.2+, Google Docs</td></tr>
+      </tbody></table></div>
+      <div>
+        <div class="flow">
+          <div class="node"><span class="nn">1</span><span class="nt">Capturar</span><span class="nd"><span class="gterm" tabindex="0" data-t="Connector" data-d="Extensão do navegador que reconhece a página e envia metadados e PDF ao programa.">Connector</span>, <span class="gterm" tabindex="0" data-t="DOI" data-d="Digital Object Identifier: identificador persistente de um documento; resolve em doi.org e na Crossref.">DOI</span>, PDF, importação</span></div>
+          <div class="node"><span class="nn">2</span><span class="nt">Organizar</span><span class="nd">Coleções, etiquetas, pesquisas salvas</span></div>
+          <div class="node"><span class="nn">3</span><span class="nt">Ler</span><span class="nd">Leitor de PDF/EPUB com anotações</span></div>
+          <div class="node"><span class="nn">4</span><span class="nt">Citar</span><span class="nd"><span class="gterm" tabindex="0" data-t="Plugin" data-d="Extensão instalada no programa (arquivo .xpi); tem acesso total à biblioteca e ao computador.">Plugin</span> para o editor; 10 mil estilos <span class="gterm" tabindex="0" data-t="CSL" data-d="Citation Style Language: linguagem aberta em que os estilos de citação (ABNT, APA…) são escritos; usada por Zotero, Pandoc e outros.">CSL</span></span></div>
+          <div class="node"><span class="nn">5</span><span class="nt">Exportar</span><span class="nd"><span class="gterm" tabindex="0" data-t="BibTeX · BibLaTeX" data-d="Formatos de banco de referências do LaTeX; cada entrada tem uma chave de citação.">BibTeX</span>, <span class="gterm" tabindex="0" data-t="RIS" data-d="Formato de intercâmbio bibliográfico em texto, lido por praticamente todas as bases e ferramentas de triagem.">RIS</span>, <span class="gterm" tabindex="0" data-t="CSL JSON" data-d="Representação em JSON dos campos de um item, exatamente como o processador de citações os lê.">CSL JSON</span>, <span class="gterm" tabindex="0" data-t="API" data-d="Interface em api.zotero.org para ler e escrever na biblioteca por programa, com chave de acesso.">API</span></span></div>
+          <div class="node"><span class="nn">6</span><span class="nt">Colaborar</span><span class="nd">Sincronização e grupos</span></div>
+        </div>
+        <div class="note"><span class="blabel">O que mudou desde a versão 7</span><p>Zotero 7 (2024) trouxe o leitor para EPUB e páginas salvas, modo escuro e o novo painel do item. A 8 redesenhou o diálogo de citação; a 9 acrescentou leitura em voz alta e inserção de anotações no editor; a 10, busca avançada com grupos de condições, seleção de várias coleções, edição em lote e o modo de leitura para PDF.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 1 ===================== -->
+<section class="slide divider" id="p1" data-title="Parte 1 · Instalar"><div class="inner"><div class="kicker-part rv">Parte 1<span>Instalar</span></div><h2 class="rv">Programa, Connector e conta</h2><p class="rv">Baixar, instalar em cada sistema, conhecer a janela principal, ligar o navegador e ativar a sincronização.</p></div><div class="num">01</div></section>
+
+<section class="slide" id="s04" data-title="Baixar">
+  <div class="inner">
+    <div class="kicker-part rv">Instalar<span>1 de 6</span></div>
+    <h2 class="rv">Baixar: dois programas, não um</h2>
+    <p class="lead rv">A página de download oferece o <strong>Zotero</strong> (o programa) e o <strong>Zotero Connector</strong> (a extensão do navegador). Os dois trabalham juntos: o Connector captura, o programa guarda. Instale os dois.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/web_download.jpg" width="1440" height="900" alt="Página de download do Zotero com os botões do programa e do Connector"></div><figcaption><b>Figura 1</b> zotero.org/download: à esquerda, o programa para o seu sistema; à direita, o Connector para o navegador detectado.</figcaption></figure>
+      <div>
+        <ol>
+          <li>Abra <a href="https://www.zotero.org/download/">zotero.org/download</a>.</li>
+          <li>A página detecta o sistema; se precisar de outra versão (ARM, 32 bits), use «Other platforms».</li>
+          <li>Baixe o instalador do programa.</li>
+          <li>Instale o Connector no navegador que você usa para pesquisar (Chrome, Firefox, Edge; no Safari ele já vem com o programa).</li>
+        </ol>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Instalar só o Connector.</strong> Sem o programa aberto, o Connector não tem para onde enviar o que captura. Baixe sempre do site oficial; versões de lojas e repositórios de distribuições Linux não são mantidas pelo projeto.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s05" data-title="Instalar no Windows, macOS e Linux">
+  <div class="inner">
+    <div class="kicker-part rv">Instalar<span>2 de 6</span></div>
+    <h2 class="rv">Instalar no Windows, macOS e Linux</h2>
+    <div class="struct rv">
+      <div><h5>Windows</h5><ol>
+        <li>Execute o arquivo <code>Zotero-10.x_x64_setup.exe</code>.</li>
+        <li>Aceite a pasta padrão; conclua.</li>
+        <li>Na primeira abertura, o Zotero instala o plugin do Word automaticamente.</li>
+      </ol></div>
+      <div><h5>macOS</h5><ol>
+        <li>Abra o <code>.dmg</code> e arraste o Zotero para «Aplicativos».</li>
+        <li>Abra pelo Launchpad; autorize na primeira execução.</li>
+        <li>O plugin do Word e o Connector do Safari são instalados a partir do programa.</li>
+      </ol></div>
+      <div><h5>Linux</h5><ol>
+        <li>Descompacte o <code>.tar.xz</code> em uma pasta fixa.</li>
+        <li>Rode <code>set_launcher_icon</code> e crie o atalho.</li>
+        <li>Para o LibreOffice, instale um Java (JRE) antes.</li>
+      </ol></div>
+    </div>
+    <div class="term rv"><div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">linux — instalação a partir do pacote oficial</span></div><pre><span class="c-p">$</span> mkdir -p ~/opt &amp;&amp; tar -xJf Zotero-*_linux-x86_64.tar.xz -C ~/opt/
+<span class="c-p">$</span> cd ~/opt/Zotero_linux-x86_64 &amp;&amp; ./set_launcher_icon
+<span class="c-p">$</span> ln -s ~/opt/Zotero_linux-x86_64/zotero.desktop ~/.local/share/applications/zotero.desktop
+<span class="c-m"># o Zotero se atualiza sozinho (Ajuda → Verificar atualizações); a pasta precisa ter permissão de escrita</span></pre></div>
+    <div class="rule-box rv"><span class="blabel">Regra</span><p>Um só computador principal por biblioteca no início. Instale nos outros <em>depois</em> de ativar a sincronização (slide 9) — assim nenhuma máquina começa com uma biblioteca vazia que sobrescreve a cheia.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="s06" data-title="Primeira abertura: a janela principal">
+  <div class="inner">
+    <div class="kicker-part rv">Instalar<span>3 de 6</span></div>
+    <h2 class="rv">Primeira abertura: a janela principal em três painéis</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/01_inicial.jpg" width="1440" height="900" alt="Janela principal do Zotero com os três painéis vazios"></div><figcaption><b>Figura 2</b> Painel de coleções à esquerda, lista de itens ao centro, painel do item à direita. Abaixo das coleções, o seletor de etiquetas.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:120px">Painel</th><th>O que mostra</th><th>O que você faz nele</th></tr></thead><tbody>
+          <tr><td><b>Esquerda</b></td><td>«Minha biblioteca», coleções, subcoleções, pesquisas salvas, bibliotecas de grupo; embaixo, etiquetas</td><td>Cria e navega coleções; filtra por <span class="gterm" tabindex="0" data-t="Etiqueta (tag)" data-d="Rótulo transversal atribuído a itens e anotações; até nove podem ter cor e tecla (1–9).">etiqueta</span></td></tr>
+          <tr><td><b>Centro</b></td><td>Itens da <span class="gterm" tabindex="0" data-t="Coleção · subcoleção" data-d="Agrupamento de itens semelhante a uma playlist: o mesmo item pode estar em várias; remover não apaga.">coleção</span> selecionada, com colunas configuráveis (título, autor, ano, data de adição)</td><td>Seleciona, ordena, busca (caixa no alto), arrasta</td></tr>
+          <tr><td><b>Direita</b></td><td>Painel do item: Informações, Resumo, Anexos, Notas, Bibliotecas e coleções, Etiquetas, Relacionados</td><td>Edita metadados; abre PDF; escreve notas</td></tr>
+        </tbody></table></div>
+        <ul class="bul">
+          <li>Barra superior: «Novo item», «Adicionar por identificador» (varinha), «Adicionar <span class="gterm" tabindex="0" data-t="Item pai · anexo" data-d="O registro bibliográfico; o arquivo (PDF, EPUB, página salva) ou link ligado a ele. Anexo sem pai não é citável.">anexo</span>», «Nova nota», busca.</li>
+          <li>Os ícones laterais do painel direito levam a cada seção sem rolar.</li>
+          <li class="warn">A biblioteca começa vazia. Não importe nada ainda: primeiro conta e sincronização.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s07" data-title="Zotero Connector">
+  <div class="inner">
+    <div class="kicker-part rv">Instalar<span>4 de 6</span></div>
+    <h2 class="rv">Zotero Connector: o botão «Salvar no Zotero» do navegador</h2>
+    <p class="lead rv">O Connector lê a página aberta, identifica o tipo de documento e envia os metadados (e o PDF, quando acessível) ao programa. É a forma mais rápida e mais confiável de capturar — melhor que arrastar o PDF.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/web_connector_chrome.jpg" width="1440" height="900" alt="Página do Zotero Connector na loja de extensões do Chrome"></div><figcaption><b>Figura 3</b> Chrome Web Store: instale e fixe o ícone na barra. Nas outras lojas o procedimento é o mesmo.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th>Navegador</th><th>Como instalar</th></tr></thead><tbody>
+          <tr><td>Chrome · Edge</td><td>Loja de extensões → «Zotero Connector» → Adicionar → fixar o ícone</td></tr>
+          <tr><td>Firefox 115+</td><td>Complementos → «Zotero Connector» → Adicionar</td></tr>
+          <tr><td>Safari 18+</td><td>Já vem com o programa: Safari → Ajustes → Extensões → ativar Zotero</td></tr>
+          <tr><td>Celular</td><td>Não há Connector; use o botão «Compartilhar» do navegador com o aplicativo Zotero instalado</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Teste</span><p>Com o Zotero aberto, abra a página de um artigo com DOI e clique no ícone. O item deve aparecer na <span class="gterm" tabindex="0" data-t="Coleção · subcoleção" data-d="Agrupamento de itens semelhante a uma playlist: o mesmo item pode estar em várias; remover não apaga.">coleção</span> selecionada em segundos. Se o ícone estiver cinza, a página não foi reconhecida (slide 13).</p></div>
+        <div class="note"><span class="blabel">Acesso institucional</span><p>Para capturar PDFs pagos, faça o acesso pela rede ou pelo proxy da universidade no próprio navegador: o Connector usa a sessão que já está aberta.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s08" data-title="Conta e sincronização">
+  <div class="inner">
+    <div class="kicker-part rv">Instalar<span>5 de 6 · verificado em 08/09/2026</span></div>
+    <h2 class="rv">Criar a conta e ativar a sincronização</h2>
+    <p class="lead rv">A conta em zotero.org é gratuita e serve para três coisas: sincronizar a biblioteca entre computadores, ter uma cópia dos <em>dados</em> na nuvem e participar de grupos. A <span class="gterm" tabindex="0" data-t="Sincronização de dados · de arquivos" data-d="Envio dos itens, notas e anotações ao zotero.org (gratuito, ilimitado); envio dos anexos (cota de 300 MB ou WebDAV).">sincronização de dados</span> (metadados, notas, etiquetas) é <strong>gratuita e ilimitada</strong>; só os arquivos anexos têm cota.</p>
+    <div class="three rv">
+      <figure><div class="shot"><img src="capturas/web_register.jpg" width="1440" height="900" alt="Formulário de registro em zotero.org"></div><figcaption><b>Figura 4</b> zotero.org/user/register: usuário, e-mail e senha. Confirme o e-mail antes de continuar.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/04_config_conta.jpg" width="1440" height="900" alt="Configurações → Conta com os campos de usuário e senha"></div><figcaption><b>Figura 5</b> Editar → Configurações → Conta: informe a conta e marque «Sincronizar automaticamente».</figcaption></figure>
+      <div>
+        <ol>
+          <li>Crie a conta em <a href="https://www.zotero.org/user/register">zotero.org/user/register</a>.</li>
+          <li>No Zotero: Editar (Windows/Linux) ou Zotero (macOS) → Configurações → Conta.</li>
+          <li>Entre com usuário e senha; marque «Sincronizar automaticamente».</li>
+          <li>Em «Sincronização de arquivos», decida se anexos sobem para o <span class="gterm" tabindex="0" data-t="Zotero Storage" data-d="Armazenamento de anexos do próprio Zotero; obrigatório para arquivos de grupos.">Zotero Storage</span> (300 MB grátis) — detalhes na Parte 7.</li>
+          <li>Clique no ícone de sincronizar (seta circular) no canto superior direito.</li>
+        </ol>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Sincronizar duas bibliotecas diferentes na mesma conta.</strong> O Zotero mescla, não substitui: o resultado é uma biblioteca com tudo dos dois lados. Se um computador tem lixo, limpe antes de ligar a sincronização nele.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s09" data-title="Idioma e configurações iniciais">
+  <div class="inner">
+    <div class="kicker-part rv">Instalar<span>6 de 6</span></div>
+    <h2 class="rv">Idioma e as configurações que valem a pena mudar no primeiro dia</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/03_config_geral.jpg" width="1440" height="900" alt="Configurações → Geral do Zotero, com o campo Idioma no alto"></div><figcaption><b>Figura 6</b> Editar → Configurações → Geral. O idioma da interface fica no alto; por padrão segue o do sistema operacional.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:120px">Aba</th><th>Opção</th><th>Recomendação</th></tr></thead><tbody>
+          <tr><td><b>Geral</b></td><td>Idioma</td><td>Português (Brasil) — os menus deste manual seguem essa escolha</td></tr>
+          <tr><td>Geral</td><td>Anexar PDFs automaticamente ao salvar</td><td>Ligado; e «Buscar <span class="gterm" tabindex="0" data-t="PDF de acesso aberto" data-d="Cópia legal e gratuita do texto — publicada, aceita (postprint) ou submetida (preprint).">PDF de acesso aberto</span>» ligado</td></tr>
+          <tr><td>Geral</td><td>Renomear arquivos automaticamente a partir dos metadados</td><td>Ligado; o PDF passa a se chamar «Autor - Ano - Título.pdf»</td></tr>
+          <tr><td>Geral</td><td>Densidade e tema</td><td>A gosto: compacta/confortável; claro/escuro/sistema</td></tr>
+          <tr><td><b>Conta</b></td><td><span class="gterm" tabindex="0" data-t="Sincronização de dados · de arquivos" data-d="Envio dos itens, notas e anotações ao zotero.org (gratuito, ilimitado); envio dos anexos (cota de 300 MB ou WebDAV).">Sincronização de dados</span> e de arquivos</td><td>Slide anterior</td></tr>
+          <tr><td><b>Exportação</b></td><td>Formato do item (<span class="gterm" tabindex="0" data-t="Cópia rápida (Quick Copy)" data-d="Copiar itens já formatados no estilo escolhido: Ctrl+Shift+A (citação), Ctrl+Shift+C (bibliografia) ou arrastar.">Cópia rápida</span>)</td><td>ABNT depois de instalar o estilo (Parte 5)</td></tr>
+          <tr><td><b>Citação</b></td><td>Estilos; plugins de editor</td><td>Parte 5</td></tr>
+          <tr><td><b>Avançado</b></td><td>Arquivos e pastas → <span class="gterm" tabindex="0" data-t="Pasta de dados" data-d="Diretório com zotero.sqlite e storage/: é a biblioteca inteira; é o que se copia no backup.">Pasta de dados</span></td><td>Anote o caminho: é o que se copia no backup (Parte 6)</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Não mova a <span class="gterm" tabindex="0" data-t="Pasta de dados" data-d="Diretório com zotero.sqlite e storage/: é a biblioteca inteira; é o que se copia no backup.">pasta de dados</span> para uma pasta sincronizada por Dropbox, OneDrive ou Google Drive: o banco <code>zotero.sqlite</code> corrompe com sincronização concorrente. Use a sincronização do próprio Zotero ou <span class="gterm" tabindex="0" data-t="WebDAV" data-d="Protocolo de acesso a arquivos por HTTP; permite guardar os anexos num servidor próprio.">WebDAV</span>.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 2 ===================== -->
+<section class="slide divider" id="p2" data-title="Parte 2 · Capturar"><div class="inner"><div class="kicker-part rv">Parte 2<span>Capturar</span></div><h2 class="rv">Trazer referências para dentro</h2><p class="rv">Por identificador, pelo navegador, pelo PDF, à mão, por importação de arquivo — e o que conferir em cada item.</p></div><div class="num">02</div></section>
+
+<section class="slide" id="s10" data-title="Adicionar por identificador">
+  <div class="inner">
+    <div class="kicker-part rv">Capturar<span>1 de 6</span></div>
+    <h2 class="rv">Adicionar por identificador: a varinha mágica</h2>
+    <p class="lead rv">Se você tem o DOI, o <span class="gterm" tabindex="0" data-t="ISBN · PMID · arXiv" data-d="Identificador de livro; identificador de artigo no PubMed; identificador de preprint no arXiv.">ISBN</span>, o <span class="gterm" tabindex="0" data-t="ISBN · PMID · arXiv" data-d="Identificador de livro; identificador de artigo no PubMed; identificador de preprint no arXiv.">PMID</span> ou o identificador do <span class="gterm" tabindex="0" data-t="ISBN · PMID · arXiv" data-d="Identificador de livro; identificador de artigo no PubMed; identificador de preprint no arXiv.">arXiv</span>, este é o caminho mais limpo: o Zotero consulta a fonte oficial e cria o item com os metadados corretos — melhor que qualquer página de editora.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/09_add_identificador_doi.jpg" width="1440" height="900" alt="Caixa Adicionar por identificador com um DOI digitado"></div><figcaption><b>Figura 7</b> Botão da varinha na barra superior → cole o identificador → Enter. Vários identificadores podem ser colados de uma vez, separados por espaço, vírgula ou quebra de linha.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/08b_novo_item_tipos.jpg" width="1440" height="900" alt="Menu Novo item com a lista de tipos de item"></div><figcaption><b>Figura 8</b> Quando não há identificador: «Novo item» → tipo (livro, tese, norma, legislação, relatório…) → preencha os campos à mão.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:110px">Identificador</th><th>Para quê</th><th>Exemplo</th></tr></thead><tbody>
+          <tr><td><b>DOI</b></td><td>Artigos, capítulos, dados, preprints</td><td class="mono">10.1136/bmj.n71</td></tr>
+          <tr><td><b><span class="gterm" tabindex="0" data-t="ISBN · PMID · arXiv" data-d="Identificador de livro; identificador de artigo no PubMed; identificador de preprint no arXiv.">ISBN</span></b></td><td>Livros</td><td class="mono">9788522470648</td></tr>
+          <tr><td><b><span class="gterm" tabindex="0" data-t="ISBN · PMID · arXiv" data-d="Identificador de livro; identificador de artigo no PubMed; identificador de preprint no arXiv.">PMID</span></b></td><td>Artigos indexados no PubMed</td><td class="mono">33782057</td></tr>
+          <tr><td><b><span class="gterm" tabindex="0" data-t="ISBN · PMID · arXiv" data-d="Identificador de livro; identificador de artigo no PubMed; identificador de preprint no arXiv.">arXiv</span></b></td><td>Preprints do arXiv</td><td class="mono">2103.00020</td></tr>
+          <tr><td><b>ADS Bibcode</b></td><td>Astronomia e física</td><td class="mono">2019ApJ...875L...1E</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Sempre que houver DOI, capture pelo DOI. O registro vem da Crossref, com autores, periódico, volume, páginas e ano — exatamente os campos que a ABNT usa.</p></div>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>DOI de outra versão.</strong> Preprint e artigo publicado têm DOIs diferentes; cite o que você leu. Confira o campo «DOI» e o tipo do item depois da captura.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s11" data-title="Salvar da web com o Connector">
+  <div class="inner">
+    <div class="kicker-part rv">Capturar<span>2 de 6</span></div>
+    <h2 class="rv">Salvar da web com o Connector: o ícone diz o que ele vai capturar</h2>
+    <p class="lead rv">Antes de clicar, olhe o ícone. Ele muda conforme o que o Connector reconheceu na página — e é o primeiro sinal de que o item vai nascer certo ou errado.</p>
+    <div class="two rv">
+      <div class="tw"><table><thead><tr><th style="width:130px">Ícone</th><th>Significa</th><th>O que fazer</th></tr></thead><tbody>
+        <tr><td><b>Artigo</b> (folha)</td><td>Reconheceu um artigo de periódico</td><td>Clique; o PDF vem junto se você tiver acesso</td></tr>
+        <tr><td><b>Livro</b></td><td>Reconheceu um livro (Amazon, catálogo, Google Books)</td><td>Clique; confira edição e editora</td></tr>
+        <tr><td><b>Pasta</b></td><td>Página de resultados com vários itens (Scopus, Web of Science, PubMed, Google Scholar, SciELO)</td><td>Clique; marque os itens que quer; «OK»</td></tr>
+        <tr><td><b>Página cinza</b></td><td>Não reconheceu: vai salvar como «Página da web»</td><td>Procure o DOI na página e use a varinha; ou salve e corrija o tipo</td></tr>
+        <tr><td><b>PDF</b></td><td>Você está com o PDF aberto no navegador</td><td>Clique; o Zotero tenta recuperar os metadados a partir do DOI no arquivo</td></tr>
+      </tbody></table></div>
+      <div>
+        <ul class="bul">
+          <li>Selecione a coleção de destino <em>antes</em> de salvar; o Connector salva na coleção ativa (dá para trocar na janelinha que aparece).</li>
+          <li>Em páginas de resultados, o ícone de pasta permite salvar dezenas de itens de uma vez — útil na triagem preliminar, ruim para revisões sistemáticas, onde o certo é exportar o arquivo da base (slide 14).</li>
+          <li class="warn">Se o Zotero não estiver aberto, o Connector oferece salvar em zotero.org; o item chega na próxima sincronização.</li>
+        </ul>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Salvar a página do editor em vez do artigo.</strong> O item nasce como «Página da web», com o título do site e sem periódico. Na lista ABNT aparece «Disponível em: https://…». Corrija o tipo do item para «Artigo de periódico» ou recapture pelo DOI.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s12" data-title="Arrastar PDF e adicionar manualmente">
+  <div class="inner">
+    <div class="kicker-part rv">Capturar<span>3 de 6</span></div>
+    <h2 class="rv">Arrastar um PDF — e quando adicionar à mão</h2>
+    <div class="two rv">
+      <div>
+        <h4>Arrastar PDF</h4>
+        <ol>
+          <li>Arraste o arquivo para a lista de itens (ou «Adicionar <span class="gterm" tabindex="0" data-t="Item pai · anexo" data-d="O registro bibliográfico; o arquivo (PDF, EPUB, página salva) ou link ligado a ele. Anexo sem pai não é citável.">anexo</span>» → «Arquivo…»).</li>
+          <li>O Zotero lê o DOI ou o título dentro do PDF e cria o <strong><span class="gterm" tabindex="0" data-t="Item pai · anexo" data-d="O registro bibliográfico; o arquivo (PDF, EPUB, página salva) ou link ligado a ele. Anexo sem pai não é citável.">item pai</span></strong> com os metadados; o PDF fica como anexo.</li>
+          <li>Se não conseguir, o PDF fica sozinho: clique com o botão direito → «Recuperar metadados do PDF».</li>
+          <li>Se ainda assim falhar, crie o item pela varinha e arraste o PDF <em>sobre</em> ele.</li>
+        </ol>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>PDF sem item pai.</strong> Um anexo solto não tem autor, ano nem título — não pode ser citado e some da lista de referências. Todo PDF precisa de um pai; «Sem coleção» e a busca por «anexo independente» ajudam a achar os órfãos.</p></div>
+      </div>
+      <div>
+        <h4>Adicionar manualmente (último recurso)</h4>
+        <ol>
+          <li>«Novo item» (ou Ctrl+Shift+N) → escolha o tipo: livro, capítulo, tese, norma, relatório, legislação…</li>
+          <li>Preencha autor (Sobrenome, Nome — um por linha), título, ano, editora ou instituição, local.</li>
+          <li>Para normas e leis, use os tipos «Norma» e «Legislação»; para trabalhos acadêmicos, «Tese»; o estilo ABNT trata cada tipo de forma diferente.</li>
+        </ol>
+        <div class="tw"><table><thead><tr><th>Quando à mão é inevitável</th><th>Tipo do item</th></tr></thead><tbody>
+          <tr><td>Norma ABNT, ISO, IEC</td><td>Norma (campo «Número»)</td></tr>
+          <tr><td>Lei, decreto, resolução</td><td>Legislação</td></tr>
+          <tr><td>Dissertação ou tese sem DOI</td><td>Tese (campo «Tipo»: Dissertação/Tese; «Universidade»)</td></tr>
+          <tr><td>Documento interno, relatório técnico</td><td>Relatório (campo «Instituição»)</td></tr>
+          <tr><td>Entrevista, comunicação pessoal</td><td>Entrevista / Carta</td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s13" data-title="Importar arquivo de uma base">
+  <div class="inner">
+    <div class="kicker-part rv">Capturar<span>4 de 6</span></div>
+    <h2 class="rv">Importar o arquivo exportado de uma base (RIS, BibTeX, CSV)</h2>
+    <p class="lead rv">Para revisões sistemáticas, o caminho correto não é o Connector: é exportar o resultado completo da busca a partir da base, com data e string registradas, e importar o arquivo. Assim o total importado bate com o total registrado no PRISMA.</p>
+    <div class="two rv">
+      <div class="tw"><table><thead><tr><th style="width:130px">Base</th><th>Como exportar</th><th>Formato</th></tr></thead><tbody>
+        <tr><td><b>Scopus</b></td><td>Selecionar tudo → Export → <span class="gterm" tabindex="0" data-t="RIS" data-d="Formato de intercâmbio bibliográfico em texto, lido por praticamente todas as bases e ferramentas de triagem.">RIS</span>; marcar «Abstract &amp; keywords»</td><td>RIS</td></tr>
+        <tr><td><b>Web of Science</b></td><td>Export → «Other file formats» → «Tab delimited» ou RIS; «Full record»</td><td>RIS · WoS tagged</td></tr>
+        <tr><td><b>PubMed</b></td><td>Send to → Citation manager</td><td>NBIB/RIS</td></tr>
+        <tr><td><b>IEEE Xplore</b></td><td>Export → Citations → RIS ou <span class="gterm" tabindex="0" data-t="BibTeX · BibLaTeX" data-d="Formatos de banco de referências do LaTeX; cada entrada tem uma chave de citação.">BibTeX</span></td><td>RIS · BibTeX</td></tr>
+        <tr><td><b>Google Scholar</b></td><td>Só item a item (aspas → BibTeX) ou pelo Connector; não exporta a busca inteira</td><td>BibTeX</td></tr>
+        <tr><td><b>SciELO · Periódicos CAPES</b></td><td>Connector (ícone de pasta) ou exportação RIS por resultado</td><td>RIS</td></tr>
+      </tbody></table></div>
+      <div>
+        <ol>
+          <li>Crie uma coleção com a base e a data: <code>busca_scopus_2026-09-08</code>.</li>
+          <li>Arquivo → Importar… → «Um arquivo (BibTeX, RIS, Zotero RDF etc.)» → escolha o arquivo.</li>
+          <li>Marque «Colocar as coleções e os itens importados em uma nova coleção» e, para triagem, desmarque o download de PDFs.</li>
+          <li>Confira o total importado contra o total da base. Diferença = registro corrompido ou limite de exportação da base.</li>
+        </ol>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Uma coleção por base e por data. Nunca misture o resultado bruto da busca com a biblioteca de leitura: a deduplicação (slide 19) acontece <em>depois</em>, e o número de cada etapa precisa continuar verificável.</p></div>
+        <p style="font-family:var(--cond);font-size:13.5px;color:var(--ink-2)">Formatos aceitos: RIS, BibTeX/<span class="gterm" tabindex="0" data-t="BibTeX · BibLaTeX" data-d="Formatos de banco de referências do LaTeX; cada entrada tem uma chave de citação.">BibLaTeX</span>, <span class="gterm" tabindex="0" data-t="CSL JSON" data-d="Representação em JSON dos campos de um item, exatamente como o processador de citações os lê.">CSL JSON</span>, Zotero RDF, EndNote XML, RefWorks, Web of Science tagged, PubMed XML, MODS, MARC, entre outros. CSV só via conversão (por exemplo, para RIS) ou plugin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s14" data-title="Encontrar o texto completo">
+  <div class="inner">
+    <div class="kicker-part rv">Capturar<span>5 de 6</span></div>
+    <h2 class="rv">Encontrar o texto completo: PDF aberto e acesso institucional</h2>
+    <p class="lead rv">Um item sem PDF é uma referência que você ainda não leu. O Zotero procura o arquivo em duas frentes: a página do DOI (que funciona se você tem acesso pela universidade) e o <span class="gterm" tabindex="0" data-t="Unpaywall" data-d="Base que localiza cópias de acesso aberto a partir do DOI; o Zotero a consulta em «Encontrar texto completo».">Unpaywall</span>, base de cópias legais em acesso aberto.</p>
+    <div class="three rv">
+      <figure><div class="shot"><img src="capturas/30_menu_encontrar_texto.jpg" width="1440" height="900" alt="Menu de contexto do item com a opção Encontrar texto completo"></div><figcaption><b>Figura 9</b> Botão direito sobre o item (ou vários) → «Encontrar texto completo».</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/32_pdf_encontrado.jpg" width="1440" height="900" alt="Janela de progresso mostrando PDF encontrado"></div><figcaption><b>Figura 10</b> A janela de progresso informa item a item: encontrado, não disponível, ou erro de acesso.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/33_item_expandido_pdf.jpg" width="1440" height="900" alt="Item expandido na lista com o PDF anexado"></div><figcaption><b>Figura 11</b> O PDF aparece como anexo do item; um clique duplo abre no leitor.</figcaption></figure>
+    </div>
+    <div class="two rv">
+      <ul class="bul">
+        <li>Faça isso conectado à rede da universidade (ou pelo proxy/VPN): a primeira tentativa é a página do editor.</li>
+        <li>Selecione muitos itens de uma vez; o Zotero respeita um intervalo entre pedidos e para se a editora bloquear.</li>
+        <li class="warn">Sem acesso e sem cópia aberta, o resultado é «não disponível» — peça pelo serviço de comutação da biblioteca, não por sites piratas.</li>
+      </ul>
+      <div class="note"><span class="blabel">Acesso aberto</span><p>O <span class="gterm" tabindex="0" data-t="Unpaywall" data-d="Base que localiza cópias de acesso aberto a partir do DOI; o Zotero a consulta em «Encontrar texto completo».">Unpaywall</span> lista a versão publicada, a aceita (<em>postprint</em>) ou a submetida (<em>preprint</em>), nessa ordem. Ao citar, verifique se a paginação do PDF encontrado corresponde à do artigo publicado.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s15" data-title="Verificar metadados">
+  <div class="inner">
+    <div class="kicker-part rv">Capturar<span>6 de 6</span></div>
+    <h2 class="rv">Verificar metadados: os campos que a ABNT usa</h2>
+    <p class="lead rv">A referência final é só a soma dos campos do item. Se o campo está errado, todas as citações e a lista saem erradas — em todos os documentos. Conferir na captura custa dez segundos; corrigir no texto pronto custa uma tarde.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/26_lista_15_itens.jpg" width="1440" height="900" alt="Painel do item com os campos de informações de um artigo"></div><figcaption><b>Figura 12</b> Painel do item → Informações. Clique em qualquer valor para editar; a mudança se propaga a todos os documentos na próxima atualização.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:110px">Campo</th><th>Como deve estar</th><th>Erro comum</th></tr></thead><tbody>
+          <tr><td><b>Tipo do item</b></td><td>Artigo de periódico, Livro, Capítulo, Tese…</td><td>«Página da web» para um artigo</td></tr>
+          <tr><td><b>Autor</b></td><td>Um por linha, «Sobrenome, Nome»; instituição em campo único (botão de alternar)</td><td>Autor institucional partido em nome e sobrenome</td></tr>
+          <tr><td><b>Título</b></td><td>Caixa baixa após a primeira palavra (o estilo ABNT não converte)</td><td>TÍTULO EM CAIXA ALTA ou Cada Palavra Maiúscula</td></tr>
+          <tr><td><b>Periódico</b></td><td>Nome completo, sem abreviação, ou a abreviação que o programa exige</td><td>Sigla da base em vez do nome</td></tr>
+          <tr><td><b>Ano / data</b></td><td>Data de publicação (não a de acesso)</td><td>Ano do preprint</td></tr>
+          <tr><td><b>Volume · número · páginas</b></td><td>Preenchidos; artigo eletrônico usa «e-locator» no campo Páginas</td><td>Vazios após capturar de página de resumo</td></tr>
+          <tr><td><b>DOI</b></td><td>Só o identificador: <code>10.xxxx/…</code></td><td>URL inteira no campo DOI</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Teste de sanidade: selecione o item e pressione <strong>Ctrl+Shift+C</strong> (<span class="gterm" tabindex="0" data-t="Cópia rápida (Quick Copy)" data-d="Copiar itens já formatados no estilo escolhido: Ctrl+Shift+A (citação), Ctrl+Shift+C (bibliografia) ou arrastar.">Cópia rápida</span> da bibliografia) num editor de texto. O que aparecer é o que a banca vai ler.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 3 ===================== -->
+<section class="slide divider" id="p3" data-title="Parte 3 · Organizar"><div class="inner"><div class="kicker-part rv">Parte 3<span>Organizar</span></div><h2 class="rv">Coleções, etiquetas e pesquisas</h2><p class="rv">Como estruturar uma biblioteca que cresce, e como manter os duplicados, os órfãos e a lixeira sob controle.</p></div><div class="num">03</div></section>
+
+<section class="slide" id="s16" data-title="Coleções e subcoleções">
+  <div class="inner">
+    <div class="kicker-part rv">Organizar<span>1 de 5</span></div>
+    <h2 class="rv">Coleções e subcoleções: listas, não pastas</h2>
+    <p class="lead rv">Uma coleção funciona como uma <em>playlist</em>: o mesmo item pode estar em várias, e removê-lo de uma não o apaga da biblioteca. «Minha biblioteca» sempre mostra tudo.</p>
+    <div class="three rv">
+      <figure><div class="shot"><img src="capturas/14_nova_colecao_dialogo.jpg" width="1440" height="900" alt="Diálogo Nova coleção"></div><figcaption><b>Figura 13</b> Botão direito em «Minha biblioteca» → «Nova coleção…»; sobre uma coleção → «Nova subcoleção».</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/18_arvore_colecoes.jpg" width="1440" height="900" alt="Árvore de coleções com subcoleções"></div><figcaption><b>Figura 14</b> Árvore por projeto → etapa. A busca de coleções (Ctrl+Shift+F) localiza qualquer uma pelo nome.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/27_adicionar_a_colecao.jpg" width="1440" height="900" alt="Menu de contexto Adicionar à coleção"></div><figcaption><b>Figura 15</b> Botão direito no item → «Adicionar à coleção», ou arraste o item sobre a coleção.</figcaption></figure>
+    </div>
+    <div class="two rv">
+      <div class="code"><div class="code-head">estrutura sugerida para um projeto de pesquisa</div><pre>Dissertação 2026/
+├── 0 Buscas brutas/            <span class="cm"># uma subcoleção por base e data; não mexer</span>
+│   ├── scopus_2026-09-08
+│   └── wos_2026-09-08
+├── 1 Triagem/                  <span class="cm"># incluídos · excluídos · dúvida</span>
+├── 2 Leitura/                  <span class="cm"># o que está sendo lido (etiqueta «lido»)</span>
+├── 3 Capítulos/                <span class="cm"># um por capítulo — o item pode estar em vários</span>
+└── 4 Normas e legislação/</pre></div>
+      <div>
+        <ul class="bul">
+          <li>Item em coleção pai <em>não</em> aparece automaticamente nas subcoleções, nem o contrário (opção em Configurações → Geral → «Mostrar itens de subcoleções»).</li>
+          <li>Apagar uma coleção não apaga os itens — salvo se escolher «Excluir coleção e itens…».</li>
+          <li>Na versão 10, selecione várias coleções com Ctrl para ver os itens de todas juntas.</li>
+        </ul>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Coleção por tema como única organização.</strong> Temas se sobrepõem e a árvore vira labirinto. Use coleções para <em>etapas e capítulos</em>; para tema, use etiquetas.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s17" data-title="Etiquetas e etiquetas coloridas">
+  <div class="inner">
+    <div class="kicker-part rv">Organizar<span>2 de 5</span></div>
+    <h2 class="rv">Etiquetas: o eixo transversal — e as nove coloridas</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/22_etiquetas_item.jpg" width="1440" height="900" alt="Seção Etiquetas do painel do item e seletor de etiquetas"></div><figcaption><b>Figura 16</b> Painel do item → Etiquetas: «Adicionar». No canto inferior esquerdo, o seletor filtra a lista pelas etiquetas marcadas; as coloridas ficam no alto.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/22b_filtro_etiqueta.jpg" width="1440" height="900" alt="Lista filtrada pela etiqueta guia de relato"></div><figcaption><b>Figura 17</b> Seletor de etiquetas (canto inferior esquerdo): clicar em «guia de relato» filtra a lista para os dois itens com essa etiqueta.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th>Tipo</th><th>Origem</th><th>Uso</th></tr></thead><tbody>
+          <tr><td><b>Manual</b> (ícone azul)</td><td>Você cria</td><td>Tema, método, status de leitura, decisão de triagem</td></tr>
+          <tr><td><b>Automática</b> (ícone laranja)</td><td>Vem da base ou do site na captura</td><td>Palavras-chave do artigo; desligue em Configurações → Geral se poluírem</td></tr>
+          <tr><td><b>Colorida</b> (até 9)</td><td>Botão direito na <span class="gterm" tabindex="0" data-t="Etiqueta (tag)" data-d="Rótulo transversal atribuído a itens e anotações; até nove podem ter cor e tecla (1–9).">etiqueta</span> → «Atribuir cor»</td><td>Aparece como quadradinho ao lado do título; tecla 1 a 9 marca/desmarca</td></tr>
+        </tbody></table></div>
+        <ul class="bul">
+          <li>Padronize a grafia: <code>metodo:estudo-de-caso</code>, <code>status:lido</code>, <code>triagem:incluido</code>. Etiquetas com prefixo se agrupam sozinhas no seletor.</li>
+          <li>Arraste itens sobre uma etiqueta no seletor para atribuí-la em lote.</li>
+          <li>Botão direito no seletor → «Excluir etiquetas automáticas nesta biblioteca» limpa o que veio das bases.</li>
+        </ul>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Coloridas para o que muda de estado — <span class="pill p-go">lido</span> <span class="pill p-amber">ler</span> <span class="pill p-stop">excluído</span> <span class="pill p-blue">citar</span>. Uma tecla, sem abrir menu, em cada item.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s18" data-title="Busca e pesquisas salvas">
+  <div class="inner">
+    <div class="kicker-part rv">Organizar<span>3 de 5</span></div>
+    <h2 class="rv">Busca, busca avançada e pesquisas salvas</h2>
+    <p class="lead rv">A caixa de busca filtra a lista enquanto você digita — por título, autor e ano; por «Todos os campos e etiquetas»; ou por «Tudo», que inclui o texto dos PDFs e das notas. A busca avançada combina condições; salva, vira uma coleção que se atualiza sozinha.</p>
+    <div class="two rv">
+      <div>
+        <ol>
+          <li>Clique no ícone de filtro ao lado da caixa de busca (ou Editar → Busca avançada).</li>
+          <li>Monte as condições: <em>Etiqueta é «status:ler»</em> E <em>Data de adição é nos últimos 30 dias</em>.</li>
+          <li>Na versão 10, agrupe condições (E / OU aninhados) e busque sem se importar com acentos: «cafe» encontra «café».</li>
+          <li>«Salvar pesquisa» → dê um nome; ela aparece no painel esquerdo com ícone próprio.</li>
+        </ol>
+        <div class="tw"><table><thead><tr><th>Pesquisa salva</th><th>Condições</th></tr></thead><tbody>
+          <tr><td>Para ler esta semana</td><td>Etiqueta «status:ler» · Anexo tem PDF</td></tr>
+          <tr><td>Sem DOI</td><td>Tipo é Artigo de periódico · DOI não contém «10.»</td></tr>
+          <tr><td>Sem PDF</td><td>Tipo é Artigo · Anexo não tem arquivo</td></tr>
+          <tr><td>Capturados como página web</td><td>Tipo é Página da web</td></tr>
+        </tbody></table></div>
+      </div>
+      <div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>As três últimas pesquisas da tabela são <strong>auditorias</strong>: rodadas antes de gerar qualquer lista de referências, apontam os itens que vão sair errados. Mantenha-as na biblioteca permanentemente.</p></div>
+        <div class="note"><span class="blabel">Texto completo</span><p>A indexação dos PDFs é automática (Configurações → Geral → Indexação de texto completo) e permite achar «aquele artigo que falava em gêmeo digital» sem lembrar o autor.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s19" data-title="Duplicados, sem coleção e lixeira">
+  <div class="inner">
+    <div class="kicker-part rv">Organizar<span>4 de 5</span></div>
+    <h2 class="rv">Duplicados, itens sem coleção e lixeira</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/20b_duplicados_mesclar.jpg" width="1440" height="900" alt="Coleção Itens duplicados com o botão Mesclar itens"></div><figcaption><b>Figura 18</b> «Itens duplicados» (painel esquerdo): clique num item, os prováveis duplicados são selecionados juntos → «Mesclar N itens». Escolha a versão principal e, campo a campo, o valor que fica.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:140px">Vista</th><th>O que mostra</th><th>Para quê</th></tr></thead><tbody>
+          <tr><td><b>Itens duplicados</b></td><td>Pares com título, DOI ou ISBN iguais (e autor/ano compatíveis)</td><td>Mesclar: o item resultante mantém coleções, etiquetas, anexos e as citações nos documentos</td></tr>
+          <tr><td><b>Sem coleção</b></td><td>Itens que não estão em nenhuma coleção</td><td>Achar o que foi capturado sem destino; encontrar PDFs órfãos</td></tr>
+          <tr><td><b>Lixeira</b></td><td>Itens, coleções e pesquisas excluídos nos últimos 30 dias</td><td>Restaurar ou esvaziar</td></tr>
+          <tr><td><b>Minhas publicações</b></td><td>Seus próprios trabalhos</td><td>Página pública no seu perfil zotero.org</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra para revisões</span><p>Deduplicar <strong>depois</strong> de importar todas as bases e <strong>antes</strong> da triagem — e anotar o número: «1.240 registros; 312 duplicados removidos; 928 triados». O Zotero mescla; o número vai para o PRISMA.</p></div>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Excluir em vez de mesclar.</strong> Excluir um dos duplicados perde as coleções e etiquetas dele; mesclar conserva tudo. E um item citado num documento que é excluído quebra a citação; mesclado, continua válido.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s20" data-title="Notas, relacionados e o painel do item">
+  <div class="inner">
+    <div class="kicker-part rv">Organizar<span>5 de 5</span></div>
+    <h2 class="rv">Notas, itens relacionados, anexos — o painel do item por seção</h2>
+    <div class="two rv">
+      <div>
+        <figure><div class="shot"><img src="capturas/24_anexos_item.jpg" width="1440" height="900" alt="Painel do item com a seção Anexos e a barra lateral de ícones"></div><figcaption><b>Figura 19</b> A barra de ícones à direita do painel salta para cada seção; cada seção recolhe e expande.</figcaption></figure>
+        <figure><div class="shot"><img src="capturas/25_menu_contexto_item.jpg" width="1440" height="900" alt="Menu de contexto de um item"></div><figcaption><b>Figura 20</b> Botão direito no item: ver on-line, encontrar texto completo, adicionar nota e anexo, duplicar, exportar, criar bibliografia, mover para a lixeira.</figcaption></figure>
+      </div>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:150px">Seção</th><th>Conteúdo</th></tr></thead><tbody>
+          <tr><td><b>Informações</b></td><td>Metadados do item — o que vai para a referência</td></tr>
+          <tr><td><b>Resumo</b></td><td>Abstract; indexado na busca</td></tr>
+          <tr><td><b>Anexos</b></td><td>PDF, EPUB, página salva, link; pré-visualização</td></tr>
+          <tr><td><b>Notas</b></td><td><strong>Notas filhas</strong>, ligadas ao item; a <strong><span class="gterm" tabindex="0" data-t="Nota filha · nota independente" data-d="Nota ligada a um item; nota solta na biblioteca, para sínteses de vários itens.">nota independente</span></strong> fica na lista, sem pai — para sínteses de vários trabalhos</td></tr>
+          <tr><td><b>Bibliotecas e coleções</b></td><td>Em que coleções e grupos o item está</td></tr>
+          <tr><td><b>Etiquetas</b></td><td>Manuais e automáticas</td></tr>
+          <tr><td><b>Relacionados</b></td><td>Vínculo manual entre itens: réplica ↔ original, comentário ↔ artigo, versão preprint ↔ publicada</td></tr>
+        </tbody></table></div>
+        <ul class="bul">
+          <li>Selecione vários itens (Ctrl/Shift ou Editar → Selecionar tudo) para mover, etiquetar, exportar ou, na versão 10, «Editar vários itens…» de uma vez.</li>
+          <li>Nova nota: Ctrl+Shift+O; o editor aceita títulos, listas, imagens e citações (Parte 4).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 4 ===================== -->
+<section class="slide divider" id="p4" data-title="Parte 4 · Ler e anotar"><div class="inner"><div class="kicker-part rv">Parte 4<span>Ler e anotar</span></div><h2 class="rv">Do destaque à nota citável</h2><p class="rv">O leitor integrado, os tipos de <span class="gterm" tabindex="0" data-t="Anotação" data-d="Destaque, sublinhado, nota, texto, área ou tinta feita no leitor; fica no banco do Zotero, não no arquivo.">anotação</span> e como transformar leitura em texto com página.</p></div><div class="num">04</div></section>
+
+<section class="slide" id="s21" data-title="Leitor integrado">
+  <div class="inner">
+    <div class="kicker-part rv">Ler e anotar<span>1 de 3</span></div>
+    <h2 class="rv">O leitor integrado: PDF, EPUB e páginas salvas, em abas</h2>
+    <p class="lead rv">Clique duplo no item abre o anexo numa aba dentro do Zotero. As anotações não são gravadas no arquivo: ficam no banco do Zotero, sincronizam, aparecem na lista de itens e podem ser pesquisadas e exportadas.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/34_leitor_pdf.jpg" width="1440" height="900" alt="Leitor de PDF do Zotero com barra de ferramentas e painel lateral"></div><figcaption><b>Figura 21</b> Barra superior: ferramentas de anotação, cor, zoom, busca. Painel esquerdo: anotações, sumário, miniaturas. Painel direito: o item pai — metadados e notas sem sair do PDF.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th>Elemento</th><th>Como usar</th></tr></thead><tbody>
+          <tr><td><b>Abas</b></td><td>Vários documentos abertos; Ctrl+Tab alterna; menu de abas lista todos</td></tr>
+          <tr><td><b>Busca no PDF</b></td><td>Ctrl+F; Enter avança; resultados destacados na página</td></tr>
+          <tr><td><b>Sumário e miniaturas</b></td><td>Painel esquerdo, segunda e terceira abas</td></tr>
+          <tr><td><b>Aparência</b></td><td>Tema claro/escuro/sépia do documento; na versão 10, «Modo de leitura» reflui o texto em coluna única com fonte ajustável</td></tr>
+          <tr><td><b>Ler em voz alta</b></td><td>Desde a versão 9; pula cabeçalhos, rodapés e citações no texto</td></tr>
+          <tr><td><b>Página em separado</b></td><td>Botão direito na aba → «Abrir em nova janela» para usar dois monitores</td></tr>
+        </tbody></table></div>
+        <div class="note"><span class="blabel">Números de página</span><p>O leitor mostra a página do PDF e a página impressa (quando o arquivo traz os rótulos). Confira qual delas está sendo usada nas citações extraídas — a ABNT pede a página impressa.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s22" data-title="Destaques, sublinhados, notas e áreas">
+  <div class="inner">
+    <div class="kicker-part rv">Ler e anotar<span>2 de 3 · atalhos conferidos em 08/09/2026</span></div>
+    <h2 class="rv">Destaques, sublinhados, notas de página, áreas e tinta</h2>
+    <div class="two rv">
+      <div>
+        <figure><div class="shot"><img src="capturas/35a_leitor_selecao_popup.jpg" width="1440" height="900" alt="Trecho destacado no leitor com o menu de cores"></div><figcaption><b>Figura 22</b> Selecione o texto: aparece a paleta para destacar ou sublinhar. Com a ferramenta travada na barra, cada seleção já sai na cor escolhida.</figcaption></figure>
+        <figure><div class="shot"><img src="capturas/36_leitor_anotacoes.jpg" width="1440" height="900" alt="Painel de anotações do leitor com destaques e comentários"></div><figcaption><b>Figura 23</b> Painel de anotações: cada destaque com o trecho, a página, o comentário e as etiquetas. Clique para ir à página; filtre por cor ou etiqueta.</figcaption></figure>
+      </div>
+      <div>
+        <div class="tw"><table><thead><tr><th>Ferramenta</th><th>Atalho</th><th>Para quê</th></tr></thead><tbody>
+          <tr><td><b>Destaque</b></td><td class="mono">Alt+1 · ⌥1</td><td>Trechos que você pode citar</td></tr>
+          <tr><td><b>Sublinhado</b></td><td class="mono">Alt+2 · ⌥2</td><td>Definições, termos</td></tr>
+          <tr><td><b>Nota</b></td><td class="mono">Alt+3 · ⌥3</td><td>Comentário fixado num ponto da página</td></tr>
+          <tr><td><b>Texto</b></td><td class="mono">Alt+4 · ⌥4</td><td>Texto livre sobre a página</td></tr>
+          <tr><td><b>Área</b></td><td class="mono">Alt+5 · ⌥5</td><td>Recorte de figura, tabela ou equação (vira imagem na nota)</td></tr>
+          <tr><td><b>Tinta</b></td><td class="mono">Alt+6 · ⌥6</td><td>Desenho à mão (tablet)</td></tr>
+        </tbody></table></div>
+        <ul class="bul">
+          <li>Cada <span class="gterm" tabindex="0" data-t="Anotação" data-d="Destaque, sublinhado, nota, texto, área ou tinta feita no leitor; fica no banco do Zotero, não no arquivo.">anotação</span> aceita <strong>comentário</strong> e <strong>etiquetas</strong> — é aqui que nasce o fichamento: «achado», «método», «limite», «citar».</li>
+          <li>Convenção de cores estável em toda a biblioteca: amarelo = achado; verde = método; vermelho = crítica; azul = citar literalmente.</li>
+          <li class="warn">Anotação feita em outro programa (Acrobat, Foxit) fica presa ao arquivo; o Zotero pode importá-la, mas não a mantém sincronizada.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s23" data-title="Da anotação à nota citável">
+  <div class="inner">
+    <div class="kicker-part rv">Ler e anotar<span>3 de 3</span></div>
+    <h2 class="rv">Extrair anotações para uma nota — com citação e página</h2>
+    <p class="lead rv">É o passo que transforma leitura em texto. Cada destaque vira um parágrafo na nota, com a citação «(AUTOR, ano, p. X)» já vinculada ao item. Ao arrastar o parágrafo para o Word, a citação vem viva.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/37_nota_de_anotacoes.jpg" width="1440" height="900" alt="Nota criada a partir das anotações, com trechos destacados e citações"></div><figcaption><b>Figura 24</b> Nota gerada a partir das anotações: trecho na cor original, citação com página e o seu comentário abaixo. Cada citação é um vínculo com o item.</figcaption></figure>
+      <div>
+        <ol>
+          <li>No leitor, painel direito → Notas → «Adicionar nota do item a partir das anotações» (ou, na lista de itens, botão direito → «Adicionar nota a partir das anotações»).</li>
+          <li>Escolha «<span class="gterm" tabindex="0" data-t="Nota filha · nota independente" data-d="Nota ligada a um item; nota solta na biblioteca, para sínteses de vários itens.">Nota filha</span>» (fica no item) ou «<span class="gterm" tabindex="0" data-t="Nota filha · nota independente" data-d="Nota ligada a um item; nota solta na biblioteca, para sínteses de vários itens.">Nota independente</span>» (para reunir vários itens).</li>
+          <li>Na nota, edite livremente; para inserir outra citação, use o botão de citação da barra da nota ou <strong>Ctrl+Alt+C</strong> (⌘⌃C no macOS).</li>
+          <li>Arraste um trecho da nota para o Word ou LibreOffice: a citação chega como campo do Zotero e entra na bibliografia.</li>
+          <li>Na versão 9 ou superior, o plugin do editor também insere anotações diretamente do documento (Adicionar nota).</li>
+        </ol>
+        <div class="rule-box"><span class="blabel">Regra</span><p>A citação direta nasce aqui, não no editor. Quem extrai o trecho com a página no momento da leitura nunca precisa reabrir o PDF para «achar onde estava».</p></div>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Página do PDF ≠ página impressa.</strong> Se o PDF não traz rótulos, a citação sai com a página do arquivo (1, 2, 3…). Corrija nos metadados do anexo ou nos rótulos do leitor antes de extrair.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 5 ===================== -->
+<section class="slide divider" id="p5" data-title="Parte 5 · Citar"><div class="inner"><div class="kicker-part rv">Parte 5<span>Citar</span></div><h2 class="rv">Estilo ABNT e o plugin do editor</h2><p class="rv">Estilos <span class="gterm" tabindex="0" data-t="CSL" data-d="Citation Style Language: linguagem aberta em que os estilos de citação (ABNT, APA…) são escritos; usada por Zotero, Pandoc e outros.">CSL</span>, instalação do estilo ABNT, o plugin para Word, LibreOffice e Google Docs, cópia rápida, bibliografia avulsa e o <span class="gterm" tabindex="0" data-t="ZoteroBib" data-d="Gerador de bibliografias no navegador (zbib.org), sem conta nem instalação.">ZoteroBib</span>.</p></div><div class="num">05</div></section>
+
+<section class="slide" id="s24" data-title="Estilos CSL">
+  <div class="inner">
+    <div class="kicker-part rv">Citar<span>1 de 6</span></div>
+    <h2 class="rv">Estilos CSL: o formato é uma escolha, não um trabalho</h2>
+    <p class="lead rv">Um estilo CSL (Citation Style Language) é um arquivo que descreve como a citação e a referência devem aparecer: ordem dos campos, pontuação, maiúsculas, autor-data ou <span class="gterm" tabindex="0" data-t="Estilo autor-data · numérico · nota" data-d="Sistemas de citação: (AUTOR, ano); [n]; nota de rodapé. A ABNT admite os dois primeiros.">numérico</span>. O repositório público tem mais de 10 mil estilos; trocar de um para outro reformata o documento inteiro.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/06_config_citacao.jpg" width="1440" height="900" alt="Configurações → Citação, aba Estilos"></div><figcaption><b>Figura 25</b> Editar → Configurações → Citação: os estilos instalados, «Obter estilos adicionais…», o botão «+» para um arquivo .csl, e a aba dos plugins de editor de texto.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th>Sistema</th><th>No texto</th><th>Na lista</th><th>Estilos</th></tr></thead><tbody>
+          <tr><td><b>Autor-data</b></td><td>(SILVA; SOUZA, 2024, p. 12)</td><td>Ordem alfabética</td><td>ABNT, APA, Harvard, Chicago autor-data</td></tr>
+          <tr><td><b><span class="gterm" tabindex="0" data-t="Estilo autor-data · numérico · nota" data-d="Sistemas de citação: (AUTOR, ano); [n]; nota de rodapé. A ABNT admite os dois primeiros.">Numérico</span></b></td><td>[1] ou ¹</td><td>Ordem de citação</td><td>ABNT numérico, IEEE, Vancouver</td></tr>
+          <tr><td><b>Nota</b></td><td>Nota de rodapé</td><td>Alfabética</td><td>Chicago notas, ABNT (note)</td></tr>
+        </tbody></table></div>
+        <ul class="bul">
+          <li>O estilo formata; os dados vêm do item. Estilo certo com item errado dá referência errada.</li>
+          <li>O idioma da citação («et al.», «In:», «Disponível em») vem de «Idioma» na mesma aba — deixe em Português (Brasil).</li>
+          <li>Um mesmo documento usa um estilo por vez; a troca é em «Preferências do documento» no editor.</li>
+        </ul>
+        <div class="note"><span class="blabel">Precisa de um estilo que não existe?</span><p>O editor visual de CSL (<a href="https://editor.citationstyles.org/">editor.citationstyles.org</a>) permite partir do ABNT e ajustar detalhes exigidos pelo programa. Salve o <code>.csl</code> e instale pelo «+».</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s25" data-title="Instalar o estilo ABNT">
+  <div class="inner">
+    <div class="kicker-part rv">Citar<span>2 de 6 · nomes conferidos no repositório CSL em 08/09/2026</span></div>
+    <h2 class="rv">Instalar o estilo ABNT — e escolher a variante certa</h2>
+    <div class="three rv">
+      <figure><div class="shot"><img src="capturas/39a_repositorio_estilos.jpg" width="1440" height="900" alt="Janela Obter estilos adicionais com a busca ABNT"></div><figcaption><b>Figura 26</b> Configurações → Citação → «Obter estilos adicionais…» → digite «ABNT» → clique no título para instalar.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/web_styles_abnt.jpg" width="1440" height="900" alt="Repositório de estilos do Zotero filtrado por ABNT"></div><figcaption><b>Figura 27</b> Mesmo resultado em zotero.org/styles: com o Connector instalado, o botão «Install» instala direto no programa.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/40_estilo_abnt_instalado.jpg" width="1440" height="900" alt="Estilo ABNT na lista de estilos instalados"></div><figcaption><b>Figura 28</b> O estilo aparece na lista e passa a ser oferecido no plugin do editor e na cópia rápida.</figcaption></figure>
+    </div>
+    <div class="two rv">
+      <div class="tw"><table><thead><tr><th>Nome no repositório</th><th>Sistema</th><th>Observação</th></tr></thead><tbody>
+        <tr><td><b>Associação Brasileira de Normas Técnicas (Português - Brasil)</b></td><td>autor-data</td><td>O estilo padrão; segue a NBR 10520:2023 para citações; atualizado em 2025</td></tr>
+        <tr><td>Associação Brasileira de Normas Técnicas (numérico, Português - Brasil)</td><td>numérico</td><td>Para programas que usam o sistema numérico</td></tr>
+        <tr><td>Associação Brasileira de Normas Técnicas (note, Português - Brasil)</td><td>nota</td><td>Citação em nota de rodapé</td></tr>
+        <tr><td>Variantes institucionais: UFRGS (completa/abreviada), UFPR, UFS, UFMG-FACE, UFES, UFPE, UERJ, USP-ECA, COPPE/UFRJ, IPEA, IBICT, PUCPR…</td><td>vários</td><td>Use a do seu programa se ele exigir; caso contrário, o padrão</td></tr>
+      </tbody></table></div>
+      <div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Depois de instalar, teste com <strong>três tipos de obra</strong> — artigo, livro, tese — e compare com o guia do seu programa. A NBR 6023:2025 e a NBR 10520:2023 são as vigentes; um estilo CSL implementa a interpretação do autor dele, e diferenças pontuais são corrigidas no estilo, não no texto.</p></div>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Corrigir o estilo à mão no documento.</strong> Na próxima atualização o plugin desfaz. O lugar da correção é o item (dado) ou o arquivo .csl (formato).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s26" data-title="Plugin para Word, LibreOffice e Google Docs">
+  <div class="inner">
+    <div class="kicker-part rv">Citar<span>3 de 6</span></div>
+    <h2 class="rv">O plugin do editor: Word, LibreOffice e Google Docs</h2>
+    <p class="lead rv">Os plugins do Word e do LibreOffice vêm com o Zotero e são instalados na primeira abertura; o do Google Docs vem com o Connector. Nos três, aparece uma aba ou menu «Zotero» com os mesmos cinco comandos.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/45b_processadores_texto.jpg" width="1440" height="900" alt="Configurações → Citação → Processadores de texto"></div><figcaption><b>Figura 29</b> Configurações → Citação → Processadores de texto: reinstalar o plugin do Word ou do LibreOffice se a aba não aparecer.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:130px">Editor</th><th>Requisito</th><th>Onde aparece</th></tr></thead><tbody>
+          <tr><td><b>Word</b></td><td>Windows: 2010–2024 ou 365 · Mac: 2016–2024 ou 365</td><td>Aba «Zotero» na faixa de opções</td></tr>
+          <tr><td><b>LibreOffice</b></td><td>5.2 ou superior, com Java (JRE) instalado</td><td>Barra de ferramentas Zotero</td></tr>
+          <tr><td><b>Google Docs</b></td><td>Connector no navegador e Zotero aberto no computador</td><td>Menu «Zotero» na barra do Docs</td></tr>
+        </tbody></table></div>
+        <ul class="bul">
+          <li>O Zotero precisa estar <strong>aberto</strong> enquanto você cita; o processamento é local, nada vai para o servidor.</li>
+          <li>No Google Docs, cada citação é um link especial; ao baixar em .docx, use «Zotero → Switch Word Processors» para converter os campos antes de continuar no Word.</li>
+          <li class="warn">Word Online e Word para iPad não têm o plugin. Pages não é suportado.</li>
+        </ul>
+        <div class="note"><span class="blabel">Se a aba não aparecer</span><p>Word: Configurações → Citação → Processadores de texto → «Reinstalar o plugin do Microsoft Word». LibreOffice: mesmo caminho, depois de instalar o Java e reiniciar. Sem Java, a instalação falha sem aviso na tela — o log do Zotero registra «unopkg failed». Documentação: zotero.org/support/word_processor_plugin_installation.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s27" data-title="Citar no editor: os cinco comandos">
+  <div class="inner">
+    <div class="kicker-part rv">Citar<span>4 de 6</span></div>
+    <h2 class="rv">Citar no editor: os cinco comandos e o fluxo de um capítulo</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/web_plugin_usage.jpg" width="1440" height="900" alt="Documentação oficial do Zotero: diálogo Adicionar/Editar citação"></div><figcaption><b>Figura 30</b> Documentação oficial (zotero.org/support/word_processor_plugin_usage) — «Adicionar/Editar citação»: digite autor, título ou ano; escolha o item; clique na citação para acrescentar página, prefixo («cf.») ou suprimir o autor. Enter insere.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:190px">Comando</th><th>O que faz</th></tr></thead><tbody>
+          <tr><td><b>Adicionar/Editar citação</b></td><td>Insere uma citação no cursor ou edita a existente; vários itens na mesma citação separados por «;»</td></tr>
+          <tr><td><b>Adicionar/Editar bibliografia</b></td><td>Insere a lista no cursor (normalmente após as conclusões); regenera a cada atualização</td></tr>
+          <tr><td><b>Adicionar nota</b></td><td>Insere uma nota do Zotero com as citações vivas (versão 9+: também anotações do PDF)</td></tr>
+          <tr><td><b>Preferências do documento</b></td><td>Estilo (ABNT), idioma, campos ou marcadores, atualização automática</td></tr>
+          <tr><td><b>Atualizar</b></td><td>Refaz citações e bibliografia com os dados atuais da biblioteca</td></tr>
+          <tr><td><b>Desvincular citações</b></td><td>Converte tudo em texto fixo. <strong>Irreversível</strong> — só numa cópia final, se o periódico exigir</td></tr>
+        </tbody></table></div>
+        <ol>
+          <li>Preferências do documento → estilo ABNT, idioma pt-BR.</li>
+          <li>Escreva; a cada afirmação, Adicionar citação (atalho configurável no Word: Alt+Shift+Z abre o diálogo no Windows).</li>
+          <li>Ao final do capítulo, Adicionar bibliografia. Ao final da tese, uma só bibliografia no fim.</li>
+          <li>Corrigiu um item no Zotero? «Atualizar». Nunca edite a lista.</li>
+        </ol>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Coautor sem Zotero editando o mesmo .docx.</strong> Os campos sobrevivem, mas ele não consegue citar. Ou todos usam Zotero (biblioteca de grupo, Parte 7), ou ele marca «[CITAR: Silva 2024]» e você insere.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s28" data-title="Cópia rápida e bibliografia avulsa">
+  <div class="inner">
+    <div class="kicker-part rv">Citar<span>5 de 6</span></div>
+    <h2 class="rv">Sem plugin: cópia rápida e «Criar bibliografia a partir dos itens»</h2>
+    <p class="lead rv">Para um e-mail, um slide, um formulário de submissão ou uma lista de leitura, não é preciso o plugin: o Zotero formata no estilo escolhido e copia.</p>
+    <div class="two rv">
+      <div>
+        <figure><div class="shot"><img src="capturas/41_criar_bibliografia.jpg" width="1440" height="900" alt="Diálogo Criar bibliografia com estilo, modo e método de saída"></div><figcaption><b>Figura 31</b> Botão direito nos itens (ou na coleção) → «Criar bibliografia a partir dos itens…» → estilo, modo (citações ou bibliografia) e saída (RTF, HTML, área de transferência, impressão).</figcaption></figure>
+      </div>
+      <div>
+        <figure><div class="shot"><img src="capturas/42_bibliografia_abnt.jpg" width="1440" height="900" alt="Bibliografia gerada no estilo ABNT colada num editor"></div><figcaption><b>Figura 32</b> Resultado colado num editor: a lista em ABNT, em ordem alfabética, pronta para conferência.</figcaption></figure>
+        <div class="tw"><table><thead><tr><th>Ação</th><th>Atalho</th><th>Resultado</th></tr></thead><tbody>
+          <tr><td>Copiar citação</td><td class="mono">Ctrl+Shift+A · ⌘⇧A</td><td>(SILVA, 2024)</td></tr>
+          <tr><td>Copiar bibliografia</td><td class="mono">Ctrl+Shift+C · ⌘⇧C</td><td>SILVA, J. Título… 2024.</td></tr>
+          <tr><td>Arrastar itens para um campo de texto</td><td>—</td><td>Igual à cópia rápida</td></tr>
+        </tbody></table></div>
+        <p style="font-family:var(--cond);font-size:13.5px;color:var(--ink-2)">O formato da cópia rápida é definido em Configurações → Exportação → «Formato do item»: escolha o ABNT — ou BibTeX, se o destino for LaTeX.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s29" data-title="ZoteroBib">
+  <div class="inner">
+    <div class="kicker-part rv">Citar<span>6 de 6</span></div>
+    <h2 class="rv">ZoteroBib: para quem não quer (ainda) instalar nada</h2>
+    <p class="lead rv">zbib.org é o gerador de bibliografias do mesmo projeto: sem conta, sem instalação, no navegador. Serve para uma lista pequena e para mostrar a um colega o que o Zotero faz — não substitui a biblioteca.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/web_zbib.jpg" width="1440" height="900" alt="Página inicial do ZoteroBib com o campo de entrada"></div><figcaption><b>Figura 33</b> zbib.org: cole um DOI, ISBN, PMID, arXiv, URL ou título; escolha o estilo; a lista se forma abaixo.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th>Faz</th><th>Não faz</th></tr></thead><tbody>
+          <tr><td>Aceita DOI, ISBN, PMID, arXiv, URL, título ou entrada manual</td><td>Não guarda PDFs nem notas</td></tr>
+          <tr><td>Mais de 10 mil estilos, inclusive ABNT</td><td>Não insere citações no texto</td></tr>
+          <tr><td>Copia para a área de transferência; exporta RTF, HTML, RIS, BibTeX; envia para o Zotero pelo Connector</td><td>Não sincroniza: a lista fica no navegador (ou num link «desta versão»)</td></tr>
+          <tr><td>Edita o item antes de gerar</td><td>Não deduplica nem organiza</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra</span><p><span class="gterm" tabindex="0" data-t="ZoteroBib" data-d="Gerador de bibliografias no navegador (zbib.org), sem conta nem instalação.">ZoteroBib</span> para uma lista de até dez itens que não vai crescer. A partir daí, instale o Zotero: o custo de migrar depois é digitar tudo de novo.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 6 ===================== -->
+<section class="slide divider" id="p6" data-title="Parte 6 · Exportar e integrar"><div class="inner"><div class="kicker-part rv">Parte 6<span>Exportar e integrar</span></div><h2 class="rv">Levar a biblioteca para fora</h2><p class="rv">BibTeX, RIS e CSL JSON; <span class="gterm" tabindex="0" data-t="Better BibTeX (BBT)" data-d="Plugin que gera chaves estáveis e mantém arquivos .bib atualizados automaticamente.">Better BibTeX</span> para LaTeX; Obsidian, Notion e a <span class="gterm" tabindex="0" data-t="API" data-d="Interface em api.zotero.org para ler e escrever na biblioteca por programa, com chave de acesso.">API</span>; ASReview e Rayyan; e o backup que ninguém faz.</p></div><div class="num">06</div></section>
+
+<section class="slide" id="s30" data-title="Exportar coleção">
+  <div class="inner">
+    <div class="kicker-part rv">Exportar<span>1 de 5</span></div>
+    <h2 class="rv">Exportar uma coleção ou a biblioteca inteira</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/38b_exportar_formatos.jpg" width="1440" height="900" alt="Diálogo Exportar coleção com a escolha de formato"></div><figcaption><b>Figura 34</b> Botão direito na coleção → «Exportar…» (ou Arquivo → Exportar a biblioteca…): a lista de formatos; com o Better BibTeX instalado aparecem as variantes «Better BibTeX/BibLaTeX» e a opção «Manter atualizado».</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:110px">Formato</th><th>Para</th><th>Observação</th></tr></thead><tbody>
+          <tr><td><b>BibTeX / <span class="gterm" tabindex="0" data-t="BibTeX · BibLaTeX" data-d="Formatos de banco de referências do LaTeX; cada entrada tem uma chave de citação.">BibLaTeX</span></b></td><td>LaTeX, Overleaf, Pandoc, Obsidian</td><td>Com <span class="gterm" tabindex="0" data-t="Better BibTeX (BBT)" data-d="Plugin que gera chaves estáveis e mantém arquivos .bib atualizados automaticamente.">Better BibTeX</span>, as chaves ficam estáveis (próximo slide)</td></tr>
+          <tr><td><b>RIS</b></td><td>ASReview, Rayyan, EndNote, Mendeley, outras bases</td><td>O formato mais interoperável para triagem</td></tr>
+          <tr><td><b>CSL JSON</b></td><td>Pandoc, scripts, verificação de referências</td><td>Representação exata dos campos que o estilo lê</td></tr>
+          <tr><td><b>Zotero RDF</b></td><td>Migrar entre bibliotecas Zotero com notas, anexos e coleções</td><td>Só o Zotero lê</td></tr>
+          <tr><td><b>CSV</b></td><td>Planilhas, matriz de síntese</td><td>Um item por linha; anexos e notas não vão</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>A cada marco do projeto (qualificação, submissão, defesa), exporte a biblioteca em <strong>Zotero RDF com arquivos</strong> e em <strong>BibTeX</strong>, e guarde com o texto. É a versão da bibliografia que corresponde àquela versão do documento.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s31" data-title="Better BibTeX">
+  <div class="inner">
+    <div class="kicker-part rv">Exportar<span>2 de 5 · verificado em 08/09/2026</span></div>
+    <h2 class="rv">Better BibTeX: chaves estáveis e exportação automática para LaTeX</h2>
+    <p class="lead rv">O BibTeX nativo do Zotero gera chaves que mudam quando o item muda. O Better BibTeX (<span class="gterm" tabindex="0" data-t="Better BibTeX (BBT)" data-d="Plugin que gera chaves estáveis e mantém arquivos .bib atualizados automaticamente.">BBT</span>) gera chaves previsíveis — <code>silva2024automacao</code> — e mantém um arquivo .bib atualizado sozinho toda vez que a biblioteca muda. É o plugin indispensável para quem escreve em LaTeX ou Markdown.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/44e_bbt_colecao.jpg" width="1440" height="900" alt="Site do Better BibTeX"></div><figcaption><b>Figura 35</b> Botão direito na coleção → «Better BibTeX»: exportação automática, download do .bib e varredura de arquivos AUX/Markdown. Documentação e .xpi em retorque.re/zotero-better-bibtex.</figcaption></figure>
+      <div>
+        <figure><div class="shot"><img src="capturas/44d_chave_citacao.jpg" width="1440" height="900" alt="Painel do item com o campo Chave de Referência gerado pelo Better BibTeX"></div><figcaption><b>Figura 36</b> Com o BBT ativo (Ferramentas → Extensões), o painel do item ganha «Chave de Referência» — a chave estável que o .bib usa (aqui <code>vandeschootOpenSourceMachine2021</code>) — e Configurações ganha a aba «Better BibTeX».</figcaption></figure>
+        <ol>
+          <li>Baixe o <code>.xpi</code> no site oficial (no Firefox, botão direito → salvar link).</li>
+          <li>Zotero → Ferramentas → Extensões → engrenagem → «Instalar plugin a partir de arquivo…».</li>
+          <li>Configurações → Better BibTeX → fórmula da chave: <code>auth.lower + year + shorttitle(1)</code> ou a que o grupo já usa.</li>
+          <li>Botão direito na coleção → Exportar → «Better BibLaTeX» → marque <strong>«Manter atualizado»</strong> → salve como <code>referencias.bib</code> na pasta do projeto LaTeX.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s32" data-title="LaTeX, Overleaf, Obsidian, Notion e API">
+  <div class="inner">
+    <div class="kicker-part rv">Exportar<span>3 de 5</span></div>
+    <h2 class="rv">LaTeX e Overleaf, Obsidian e Notion, Zotero Web e API</h2>
+    <div class="two rv">
+      <div>
+        <div class="code"><div class="code-head">latex — referências ABNT com abnTeX2 a partir do .bib mantido pelo BBT</div><pre><span class="k">\usepackage</span>[alf,abnt-emphasize=bf]{abntex2cite}   <span class="cm">% ou biblatex-abnt</span>
+<span class="k">\bibliography</span>{referencias}                          <span class="cm">% o arquivo que o BBT mantém</span>
+
+Como mostra <span class="k">\citeonline</span>{silva2024automacao}, …      <span class="cm">% Silva (2024)</span>
+… conforme a literatura <span class="k">\cite</span>{silva2024automacao}.  <span class="cm">% (SILVA, 2024)</span></pre></div>
+        <ul class="bul">
+          <li><strong>Overleaf</strong>: em Project → «Add files» → «From Zotero» a conta é ligada e o .bib é atualizado a partir da biblioteca; com o <span class="gterm" tabindex="0" data-t="Better BibTeX (BBT)" data-d="Plugin que gera chaves estáveis e mantém arquivos .bib atualizados automaticamente.">BBT</span>, alternativamente, sincronize o .bib por Git ou Dropbox.</li>
+          <li><strong>Obsidian</strong>: o plugin comunitário «Zotero Integration» importa citações, notas e anotações do PDF; exige o BBT. O «Better Notes» (plugin do Zotero) exporta e sincroniza notas em Markdown.</li>
+          <li><strong>Notion</strong>: o plugin «Notero» sincroniza coleções para uma base do Notion; a versão atual exige Zotero 10.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:130px">Serviço</th><th>O que é</th><th>Para quê</th></tr></thead><tbody>
+          <tr><td><b>Zotero Web</b></td><td>zotero.org/mylibrary: a biblioteca sincronizada no navegador</td><td>Consultar de qualquer máquina; ler PDFs armazenados; gerir grupos</td></tr>
+          <tr><td><b>API</b></td><td><code>https://api.zotero.org</code>; chave criada em zotero.org/settings/keys</td><td>Scripts que leem ou escrevem itens, coleções e etiquetas; integração com sites, painéis e agentes</td></tr>
+          <tr><td><b>Conector local</b></td><td>Porta 23119 do Zotero aberto</td><td>Usada pelo Connector, pelo Obsidian e por editores externos</td></tr>
+        </tbody></table></div>
+        <div class="term"><div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">api — os 5 itens mais recentes de uma biblioteca (pyzotero)</span></div><pre><span class="c-p">$</span> pip install pyzotero
+<span class="c-p">$</span> python3 -c "from pyzotero import zotero; z=zotero.Zotero('USER_ID','user','CHAVE'); print([i['data']['title'] for i in z.top(limit=5)])"
+<span class="c-m"># USER_ID e CHAVE em zotero.org/settings/keys — a chave dá acesso à sua biblioteca: não a coloque em repositório</span></pre></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s33" data-title="ASReview e Rayyan: triagem">
+  <div class="inner">
+    <div class="kicker-part rv">Exportar<span>4 de 5</span></div>
+    <h2 class="rv">ASReview e Rayyan: exportar em RIS para a triagem</h2>
+    <p class="lead rv">O Zotero é o lugar da biblioteca, não da triagem. Ferramentas de triagem (ASReview, Rayyan, Covidence) leem RIS, registram a decisão por revisor e devolvem o resultado — que volta ao Zotero como coleção de incluídos.</p>
+    <div class="two rv">
+      <div>
+        <div class="flow">
+          <div class="node"><span class="nn">1</span><span class="nt">Buscar</span><span class="nd">Uma coleção por base e data (slide 14)</span></div>
+          <div class="node"><span class="nn">2</span><span class="nt">Deduplicar</span><span class="nd">«Itens duplicados» → mesclar; anotar os números</span></div>
+          <div class="node"><span class="nn">3</span><span class="nt">Exportar RIS</span><span class="nd">Coleção «triagem» → Exportar → RIS, sem arquivos</span></div>
+          <div class="node"><span class="nn">4</span><span class="nt">Triar</span><span class="nd">ASReview (ativa) ou Rayyan (dois revisores cegos)</span></div>
+          <div class="node"><span class="nn">5</span><span class="nt">Reimportar</span><span class="nd">RIS dos incluídos → coleção «incluídos»; buscar PDFs</span></div>
+          <div class="node gate"><span class="nn">6</span><span class="nt">Ler e extrair</span><span class="nd">Anotações → notas → matriz de síntese</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="tw"><table><thead><tr><th>Ferramenta</th><th>Lê</th><th>Devolve</th><th>Observação</th></tr></thead><tbody>
+          <tr><td><b>ASReview LAB</b></td><td>RIS (.ris/.txt), CSV, TSV, XLSX</td><td>RIS/CSV com rótulo de inclusão</td><td>Livre; aprendizado ativo ordena os registros por relevância; a decisão é sua</td></tr>
+          <tr><td><b>Rayyan</b></td><td>RIS, BibTeX, EndNote, CSV, PubMed</td><td>CSV/RIS com decisão por revisor e motivo</td><td>Gratuito no básico; modo cego para dois revisores</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Ao exportar para triagem, inclua <strong>resumo e palavras-chave</strong> no RIS (o Zotero exporta o campo Resumo se ele foi preenchido na captura). Sem resumo, a triagem por título é cega — e o ASReview não tem com que aprender.</p></div>
+        <div class="note"><span class="blabel">Manual irmão</span><p>Triagem assistida por IA, registro de uso e a regra «status preliminar; você decide» estão no manual de <a href="https://manual.mirandastech.com.br/">Uso de IA na pesquisa científica</a>.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s34" data-title="Backup da pasta de dados">
+  <div class="inner">
+    <div class="kicker-part rv">Exportar<span>5 de 5</span></div>
+    <h2 class="rv">Backup: a pasta de dados é a sua biblioteca</h2>
+    <p class="lead rv">Tudo — metadados, notas, anotações, etiquetas e os PDFs armazenados — está numa única pasta. A sincronização com zotero.org é uma cópia, mas não é um backup: um item apagado por engano some dos dois lados na próxima sincronização.</p>
+    <div class="two rv">
+      <div class="code"><div class="code-head">pasta de dados — onde fica e o que contém</div><pre>Windows   C:\Users\&lt;usuário&gt;\Zotero\
+macOS     /Users/&lt;usuário&gt;/Zotero/
+Linux     ~/Zotero/
+
+zotero.sqlite          <span class="cm"># o banco: itens, notas, anotações, etiquetas, coleções</span>
+zotero.sqlite.bak      <span class="cm"># cópia automática do banco</span>
+storage/               <span class="cm"># um subdiretório de 8 letras por anexo: os PDFs</span>
+styles/  translators/  <span class="cm"># estilos CSL e tradutores instalados</span>
+
+<span class="cm"># localizar: Configurações → Avançado → Arquivos e pastas → «Mostrar pasta de dados»</span></pre></div>
+      <div>
+        <ol>
+          <li><strong>Feche o Zotero.</strong> Copiar com o programa aberto pode corromper o banco.</li>
+          <li>Copie a pasta inteira para um disco externo ou para um serviço de backup versionado.</li>
+          <li>Agende: semanal durante a escrita, diário na reta final. Um script de cópia com data no nome resolve.</li>
+          <li>Restaurar = fechar o Zotero, trocar a pasta, abrir.</li>
+        </ol>
+        <div class="term"><div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">linux/macos — backup datado (com o Zotero fechado)</span></div><pre><span class="c-p">$</span> tar -czf ~/Backups/zotero_$(date +%F).tar.gz -C ~ Zotero
+<span class="c-p">$</span> ls -lh ~/Backups/ | tail -3</pre></div>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Pasta de dados dentro do Dropbox/OneDrive/Drive.</strong> Dois computadores sincronizando o mesmo <code>zotero.sqlite</code> corrompem o banco. Se quiser arquivos fora do <span class="gterm" tabindex="0" data-t="Zotero Storage" data-d="Armazenamento de anexos do próprio Zotero; obrigatório para arquivos de grupos.">Zotero Storage</span>, use <span class="gterm" tabindex="0" data-t="WebDAV" data-d="Protocolo de acesso a arquivos por HTTP; permite guardar os anexos num servidor próprio.">WebDAV</span> (Parte 7) ou <em>anexos vinculados</em> com pasta-base — nunca a pasta de dados.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 7 ===================== -->
+<section class="slide divider" id="p7" data-title="Parte 7 · Colaborar e sincronizar"><div class="inner"><div class="kicker-part rv">Parte 7<span>Colaborar e sincronizar</span></div><h2 class="rv">Uma biblioteca em vários lugares — e para várias pessoas</h2><p class="rv">O que é grátis e o que é pago na sincronização; WebDAV; grupos e a biblioteca compartilhada de uma revisão.</p></div><div class="num">07</div></section>
+
+<section class="slide" id="s35" data-title="Sincronização de dados e de arquivos">
+  <div class="inner">
+    <div class="kicker-part rv">Colaborar<span>1 de 2 · valores conferidos em 08/09/2026</span></div>
+    <h2 class="rv">Sincronização de dados (grátis, ilimitada) × de arquivos (300 MB grátis)</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/web_storage.jpg" width="1440" height="900" alt="Página de planos de armazenamento do Zotero"></div><figcaption><b>Figura 37</b> zotero.org/storage: 300 MB gratuitos; 2 GB por US$ 20/ano; 6 GB por US$ 60/ano; ilimitado por US$ 120/ano. Só os anexos contam.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:150px"></th><th>Dados</th><th>Arquivos</th></tr></thead><tbody>
+          <tr><td><b>O que é</b></td><td>Itens, notas, anotações, etiquetas, coleções, pesquisas</td><td>PDFs, EPUBs, páginas salvas, imagens</td></tr>
+          <tr><td><b>Custo</b></td><td>Gratuito e ilimitado</td><td>300 MB grátis no Zotero Storage; planos acima; ou WebDAV próprio</td></tr>
+          <tr><td><b>Onde ligar</b></td><td>Configurações → Conta</td><td>Mesma aba → «Sincronização de arquivos»: Zotero Storage ou WebDAV; grupos só pelo Storage</td></tr>
+          <tr><td><b>Sem sincronizar arquivos</b></td><td>—</td><td>A biblioteca funciona igual; os PDFs ficam só na máquina onde foram salvos</td></tr>
+        </tbody></table></div>
+        <h4>WebDAV: arquivos no seu servidor</h4>
+        <ul class="bul">
+          <li>Qualquer servidor WebDAV serve: Nextcloud, ownCloud, o da universidade, provedores comerciais.</li>
+          <li>Configurações → Conta → Sincronização de arquivos → «WebDAV» → URL, usuário, senha → «Verificar servidor».</li>
+          <li class="warn">WebDAV vale só para «Minha biblioteca». Bibliotecas de grupo usam o Zotero Storage <em>do dono do grupo</em>.</li>
+        </ul>
+        <div class="rule-box"><span class="blabel">Regra</span><p>Mestrado cabe em 300 MB se você <strong>não sincronizar arquivos</strong> ou usar WebDAV. Se preferir simplicidade, o plano de 2 GB custa menos que um livro por ano — e vale pela cópia dos PDFs.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s36" data-title="Grupos e a biblioteca de uma revisão">
+  <div class="inner">
+    <div class="kicker-part rv">Colaborar<span>2 de 2</span></div>
+    <h2 class="rv">Grupos: uma biblioteca compartilhada — e como usá-la numa revisão</h2>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/web_groups.jpg" width="1440" height="900" alt="Página de criação de grupo em zotero.org"></div><figcaption><b>Figura 38</b> zotero.org/groups → «Create a New Group» (ou, no programa, Arquivo → Nova biblioteca → Novo grupo…): nome e tipo. Depois, em «Group Settings», as permissões.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:150px">Tipo</th><th>Quem vê</th><th>Quem entra</th><th>Arquivos</th></tr></thead><tbody>
+          <tr><td><b>Privado</b></td><td>Só membros</td><td>Por convite</td><td>Sim</td></tr>
+          <tr><td><b>Público, adesão fechada</b></td><td>Qualquer pessoa</td><td>Convite ou pedido</td><td>Sim</td></tr>
+          <tr><td><b>Público, adesão aberta</b></td><td>Qualquer pessoa</td><td>Qualquer pessoa</td><td>Não</td></tr>
+        </tbody></table></div>
+        <ul class="bul">
+          <li>Papéis: dono (apaga, transfere), administradores (permissões, membros), membros. Edição: «qualquer membro» ou «só administradores».</li>
+          <li>Os arquivos do grupo contam na cota do <strong>dono</strong>; os itens (dados) não contam para ninguém.</li>
+          <li>Arrastar um item de «Minha biblioteca» para o grupo faz uma <strong>cópia</strong>: mudanças depois disso não se propagam.</li>
+          <li>Desde a versão 9, as colunas «Adicionado por» e «Modificado por» mostram quem fez o quê.</li>
+        </ul>
+        <div class="case"><span class="blabel">Passo a passo · revisão com dois revisores</span><p>1. Grupo privado «Revisão X», edição por qualquer membro. 2. Subcoleções: buscas brutas (só o responsável mexe), deduplicados, triagem, incluídos, extração. 3. Etiquetas coloridas por revisor: <code>R1:incluir</code>, <code>R2:incluir</code>, <code>R1:excluir</code>… 4. Conflitos = itens com uma etiqueta de cada; resolvidos em reunião e registrados em nota independente. 5. Os PDFs dos incluídos ficam no grupo (cota do dono) para que todos leiam e anotem o mesmo arquivo — as anotações de cada um aparecem com o nome do autor.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PARTE 8 ===================== -->
+<section class="slide divider" id="p8" data-title="Parte 8 · Plugins úteis"><div class="inner"><div class="kicker-part rv">Parte 8<span>Plugins úteis</span></div><h2 class="rv">Estender com cuidado</h2><p class="rv">Como instalar de forma segura, e os plugins que existem para as versões atuais.</p></div><div class="num">08</div></section>
+
+<section class="slide" id="s37" data-title="Instalar plugins com segurança">
+  <div class="inner">
+    <div class="kicker-part rv">Plugins<span>1 de 2</span></div>
+    <h2 class="rv">Instalar plugins com segurança</h2>
+    <p class="lead rv">Um plugin tem acesso total à sua biblioteca e ao seu computador. O projeto Zotero não mantém uma lista oficial (um diretório está planejado); os plugins são anunciados no fórum e vivem no GitHub dos autores. Instale só de fontes que você conhece.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/43_plugins_janela.jpg" width="1440" height="900" alt="Janela Ferramentas → Extensões do Zotero"></div><figcaption><b>Figura 39</b> Ferramentas → Extensões: lista dos instalados, ativar/desativar, remover; engrenagem → «Instalar plugin a partir de arquivo…» e «Verificar atualizações».</figcaption></figure>
+      <div>
+        <figure><div class="shot"><img src="capturas/web_plugins.jpg" width="1440" height="900" alt="Página de documentação de plugins do Zotero"></div><figcaption><b>Figura 40</b> zotero.org/support/plugins: o aviso oficial — «instale apenas plugins de desenvolvedores em quem você confia».</figcaption></figure>
+        <ol>
+          <li>Vá ao repositório GitHub do plugin → «Releases» → baixe o <code>.xpi</code> mais recente (Firefox: botão direito → salvar).</li>
+          <li>Confira no README a versão do Zotero suportada — os ciclos curtos desde 2026 deixam plugins para trás.</li>
+          <li>Ferramentas → Extensões → engrenagem → «Instalar plugin a partir de arquivo…».</li>
+          <li>Instale <strong>um de cada vez</strong> e use por uma semana antes do próximo: se algo quebrar, você sabe qual.</li>
+        </ol>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Plugin de tutorial antigo.</strong> O ZotFile, onipresente em guias até 2023, não é mantido e não funciona nas versões atuais; boa parte do que fazia (renomear e mover anexos) hoje é nativo — Configurações → Geral → renomeação automática — e o resto está no ZotMoov e no Attanger.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide alt" id="s38" data-title="Plugins úteis nas versões atuais">
+  <div class="inner">
+    <div class="kicker-part rv">Plugins<span>2 de 2 · compatibilidade conferida nos repositórios em 08/09/2026</span></div>
+    <h2 class="rv">Plugins úteis — e a versão do Zotero que cada um declara</h2>
+    <div class="tw rv"><table><thead><tr><th style="width:190px">Plugin</th><th>Para quê</th><th style="width:170px">Declara suporte a</th><th>Fonte</th></tr></thead><tbody>
+      <tr><td><b>Better BibTeX</b></td><td>Chaves de citação estáveis; exportação automática .bib; base para Obsidian e LaTeX</td><td><span class="pill p-go">Zotero 8+</span> (8.0.25 foi a última para o 7)</td><td class="mono">retorque.re/zotero-better-bibtex</td></tr>
+      <tr><td><b>ZotMoov</b></td><td>Mover/copiar anexos para uma pasta própria; anexos vinculados; sucessor do ZotFile</td><td><span class="pill p-go">Zotero 7</span> (verificar 8–10 no README)</td><td class="mono">github.com/wileyyugioh/zotmoov</td></tr>
+      <tr><td><b>Attanger</b></td><td>Anexar o último download, renomear com o modelo nativo, mover para estrutura de pastas</td><td><span class="pill p-go">Zotero 7 a 10</span></td><td class="mono">github.com/MuiseDestiny/zotero-attanger</td></tr>
+      <tr><td><b>Ethereal Style</b> (Zotero Style)</td><td>Progresso de leitura, coluna de etiquetas, grafo de relações, negrito nos não lidos</td><td><span class="pill p-amber">não declara versão</span></td><td class="mono">github.com/MuiseDestiny/zotero-style</td></tr>
+      <tr><td><b>Better Notes</b></td><td>Modelos de nota, links entre notas, exportação e sincronização em Markdown (Obsidian)</td><td><span class="pill p-go">Zotero 8/9</span></td><td class="mono">github.com/windingwind/zotero-better-notes</td></tr>
+      <tr><td><b>Translate for Zotero</b></td><td>Tradução de trechos, títulos, resumos e anotações (20+ serviços)</td><td><span class="pill p-go">Zotero 7/8</span></td><td class="mono">github.com/windingwind/zotero-pdf-translate</td></tr>
+      <tr><td><b>Actions &amp; Tags</b></td><td>Etiquetas automáticas por evento; atalhos; scripts próprios</td><td><span class="pill p-go">Zotero 7</span></td><td class="mono">github.com/windingwind/zotero-actions-tags</td></tr>
+      <tr><td><b>Linter for Zotero</b></td><td>Padroniza títulos (caixa de frase), abreviações de periódico, DOI, datas, idioma</td><td><span class="pill p-go">Zotero 7 a 9+</span></td><td class="mono">github.com/northword/zotero-format-metadata</td></tr>
+      <tr><td><b>Citation Counts Manager</b></td><td>Coluna com número de citações (Crossref, Semantic Scholar, INSPIRE)</td><td><span class="pill p-go">Zotero 7</span></td><td class="mono">github.com/FrLars21/ZoteroCitationCountsManager</td></tr>
+      <tr><td><b>Notero</b></td><td>Sincroniza coleções para o Notion</td><td><span class="pill p-go">Zotero 10+</span> (v1.2.3 para 7–9)</td><td class="mono">github.com/dvanoni/notero</td></tr>
+      <tr><td><b>Zotero Integration</b> (Obsidian)</td><td>Plugin do Obsidian, não do Zotero: importa citações e anotações; exige o BBT</td><td>—</td><td class="mono">github.com/mgmeyers/obsidian-zotero-integration</td></tr>
+      <tr><td><b>Night for Zotero</b> · <b>ZotFile</b></td><td>Descontinuados: o modo escuro é nativo desde a 7; renomear/mover é nativo ou ZotMoov/Attanger</td><td><span class="pill p-stop">não usar</span></td><td>—</td></tr>
+    </tbody></table></div>
+    <p class="rv" style="font-family:var(--cond);font-size:13.5px;color:var(--ink-2)">«Declara suporte a» reproduz o que o README ou o manifesto de cada projeto informava na data; com o ciclo de versões atual do Zotero, confira antes de instalar. Plugins com IA (resumo, chat com o PDF) existem em quantidade; o critério para usá-los está no manual irmão de uso de IA.</p>
+  </div>
+</section>
+
+<!-- ===================== PARTE 9 ===================== -->
+<section class="slide divider" id="p9" data-title="Parte 9 · Boas práticas e fechamento"><div class="inner"><div class="kicker-part rv">Parte 9<span>Boas práticas e fechamento</span></div><h2 class="rv">Erros comuns, checklist, fluxo completo, glossário e referências</h2><p class="rv">O que costuma dar errado, o que conferir no primeiro dia, e como o Zotero se encaixa nos outros dois manuais.</p></div><div class="num">09</div></section>
+
+<section class="slide" id="s39" data-title="Erros comuns">
+  <div class="inner">
+    <div class="kicker-part rv">Fechamento<span>1 de 7</span></div>
+    <h2 class="rv">Erros comuns — como aparecem na referência e como corrigir</h2>
+    <div class="tw rv"><table><thead><tr><th>Erro</th><th>Como aparece na lista ABNT</th><th>Causa</th><th style="width:200px">Correção</th></tr></thead><tbody>
+      <tr><td>Metadados do site em vez do artigo</td><td>Título do portal; «Disponível em: https://…»; sem periódico</td><td>Ícone cinza no Connector; página de resumo</td><td><span class="pill p-blue">recapturar pelo DOI</span></td></tr>
+      <tr><td>DOI ausente</td><td>Referência sem o DOI que a NBR 6023 pede quando existe</td><td>Captura de base sem DOI; PDF antigo</td><td><span class="pill p-blue"><span class="gterm" tabindex="0" data-t="Pesquisa salva" data-d="Busca avançada guardada como coleção que se atualiza sozinha.">pesquisa salva</span> «sem DOI»; buscar na Crossref</span></td></tr>
+      <tr><td>Título em caixa alta ou Cada Palavra Maiúscula</td><td>TÍTULO GRITADO; o estilo não converte</td><td>Base exporta assim (Scopus, WoS)</td><td><span class="pill p-blue">botão direito no título → «Caixa de frase»; Linter</span></td></tr>
+      <tr><td>Autor institucional partido</td><td>«NACIONAL, Agência» em vez de «AGÊNCIA NACIONAL…»</td><td>Campo em modo nome/sobrenome</td><td><span class="pill p-blue">alternar para campo único no autor</span></td></tr>
+      <tr><td>Duplicatas</td><td>A mesma obra duas vezes, ou «2024a/2024b» falsos</td><td>Captura repetida; várias bases</td><td><span class="pill p-blue">Itens duplicados → mesclar</span></td></tr>
+      <tr><td>«Untitled» / «Sem título»</td><td>Item sem título na lista</td><td>PDF sem metadados; captura falhou</td><td><span class="pill p-amber">recuperar metadados; preencher à mão</span></td></tr>
+      <tr><td>PDF sem item pai</td><td>Não aparece na lista — a citação não existe</td><td>Arrastou o PDF e a recuperação falhou</td><td><span class="pill p-stop">criar item pai; arrastar o PDF sobre ele</span></td></tr>
+      <tr><td>Ano do preprint, DOI da versão errada</td><td>Ano e páginas que não existem na versão citada</td><td>Capturou do arXiv/SSRN o que leu no periódico</td><td><span class="pill p-amber">recapturar pelo DOI da versão lida</span></td></tr>
+      <tr><td>Lista editada à mão</td><td>Correções somem no «Atualizar»</td><td>Corrigiu no Word, não no item</td><td><span class="pill p-stop">corrigir no item; nunca na lista</span></td></tr>
+      <tr><td>Banco corrompido</td><td>«Erro ao abrir o banco de dados»</td><td>Pasta de dados no Dropbox/Drive</td><td><span class="pill p-stop">tirar da pasta sincronizada; restaurar .bak</span></td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<section class="slide alt" id="s40" data-title="Checklist de configuração inicial">
+  <div class="inner">
+    <div class="kicker-part rv">Fechamento<span>2 de 7</span></div>
+    <h2 class="rv">Checklist: configuração inicial e antes de gerar a primeira lista</h2>
+    <p class="lead rv">Marque conforme concluir. O estado fica salvo neste navegador — não é compartilhado nem enviado a lugar nenhum.</p>
+    <div class="check rv" id="checklist">
+      <div class="check-item"><input type="checkbox" id="c01"><label for="c01"><b>Instalação</b>Zotero 10 instalado do site oficial; Connector no navegador de pesquisa; ícone testado numa página com DOI</label></div>
+      <div class="check-item"><input type="checkbox" id="c02"><label for="c02"><b>Conta</b>Conta criada e confirmada; sincronização automática ligada; decisão registrada sobre arquivos (Storage, WebDAV ou nenhum)</label></div>
+      <div class="check-item"><input type="checkbox" id="c03"><label for="c03"><b>Configurações</b>Idioma pt-BR; PDF automático e acesso aberto ligados; renomeação automática ligada; pasta de dados fora de Dropbox/Drive</label></div>
+      <div class="check-item"><input type="checkbox" id="c04"><label for="c04"><b>Estilo</b>Estilo ABNT (ou a variante do programa) instalado e testado com artigo, livro e tese; idioma da citação pt-BR</label></div>
+      <div class="check-item"><input type="checkbox" id="c05"><label for="c05"><b>Editor</b>Aba Zotero visível no Word/LibreOffice (ou menu no Docs); Preferências do documento com o estilo ABNT</label></div>
+      <div class="check-item"><input type="checkbox" id="c06"><label for="c06"><b>Estrutura</b>Coleções por etapa e capítulo; convenção de etiquetas escrita; cores atribuídas a lido/ler/citar/excluído</label></div>
+      <div class="check-item"><input type="checkbox" id="c07"><label for="c07"><b>Auditorias</b>Pesquisas salvas «sem DOI», «sem PDF», «página da web» criadas e rodadas</label></div>
+      <div class="check-item"><input type="checkbox" id="c08"><label for="c08"><b>Duplicados</b>«Itens duplicados» vazio antes da triagem e antes de cada lista</label></div>
+      <div class="check-item"><input type="checkbox" id="c09"><label for="c09"><b>Órfãos</b>«Sem coleção» revisado; nenhum PDF sem item pai</label></div>
+      <div class="check-item"><input type="checkbox" id="c10"><label for="c10"><b>Metadados</b>Amostra de dez itens conferida: tipo, autores, título em caixa de frase, periódico, ano, volume, páginas, DOI</label></div>
+      <div class="check-item"><input type="checkbox" id="c11"><label for="c11"><b>Leitura</b>Convenção de cores das anotações definida; notas extraídas com página; citação nas notas testada</label></div>
+      <div class="check-item"><input type="checkbox" id="c12"><label for="c12"><b>Exportação</b>Better BibTeX instalado se houver LaTeX/Obsidian; .bib com «manter atualizado»</label></div>
+      <div class="check-item"><input type="checkbox" id="c13"><label for="c13"><b>Backup</b>Cópia da pasta de dados feita com o Zotero fechado; rotina agendada</label></div>
+      <div class="check-item"><input type="checkbox" id="c14"><label for="c14"><b>Grupo</b>Se há coautores: grupo privado criado, permissões definidas, quem é o dono da cota decidido</label></div>
+      <div class="check-item"><input type="checkbox" id="c15"><label for="c15"><b>Plugins</b>Só os necessários, um de cada vez, de repositórios conhecidos, com versão do Zotero conferida</label></div>
+      <div class="check-item"><input type="checkbox" id="c16"><label for="c16"><b>Lista</b>Ctrl+Shift+C num item de cada tipo produz a referência que o guia do programa espera</label></div>
+      <div class="check-foot"><span id="check-status">0 de 16</span><button type="button" id="check-reset">limpar</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s41" data-title="Fluxo completo de uma revisão">
+  <div class="inner">
+    <div class="kicker-part rv">Fechamento<span>3 de 7</span></div>
+    <h2 class="rv">O fluxo completo de uma revisão — da busca ao texto citado</h2>
+    <p class="lead rv">Cada etapa deixa um número e uma coleção. É o que permite escrever o diagrama PRISMA a partir da biblioteca, e não de memória.</p>
+    <div class="tw rv"><table><thead><tr><th style="width:36px">#</th><th style="width:150px">Etapa</th><th>No Zotero</th><th>Fora do Zotero</th><th style="width:180px">Deixa registrado</th></tr></thead><tbody>
+      <tr><td class="num">1</td><td><b>Buscar</b></td><td>Coleção «0 Buscas brutas» → uma <span class="gterm" tabindex="0" data-t="Coleção · subcoleção" data-d="Agrupamento de itens semelhante a uma playlist: o mesmo item pode estar em várias; remover não apaga.">subcoleção</span> por base e data; importar RIS</td><td>String, filtros e total anotados no log de busca</td><td>Total por base</td></tr>
+      <tr><td class="num">2</td><td><b>Deduplicar</b></td><td>«Itens duplicados» → mesclar; mover tudo para «1 Triagem»</td><td>—</td><td>Removidos; restantes</td></tr>
+      <tr><td class="num">3</td><td><b>Triar</b></td><td>Exportar RIS sem arquivos → reimportar incluídos em «2 Incluídos»; etiquetas <code>triagem:excluido:motivo</code></td><td>ASReview ou Rayyan; dois revisores; conflitos resolvidos</td><td>Excluídos por motivo</td></tr>
+      <tr><td class="num">4</td><td><b>Obter texto completo</b></td><td>Selecionar tudo → «Encontrar texto completo»; <span class="gterm" tabindex="0" data-t="Pesquisa salva" data-d="Busca avançada guardada como coleção que se atualiza sozinha.">pesquisa salva</span> «sem PDF»</td><td>Comutação bibliográfica para os que faltam</td><td>Não recuperados</td></tr>
+      <tr><td class="num">5</td><td><b>Ler e anotar</b></td><td>Leitor; cores por tipo de achado; etiquetas nas anotações; extrair notas com página</td><td>—</td><td>Uma nota por estudo</td></tr>
+      <tr><td class="num">6</td><td><b>Extrair e sintetizar</b></td><td>Nota independente por tema; exportar CSV para a matriz de síntese</td><td>Planilha ou script de análise</td><td>Matriz de síntese</td></tr>
+      <tr><td class="num">7</td><td><b>Escrever citando</b></td><td>Plugin do editor: Adicionar citação; arrastar trechos das notas; uma bibliografia ao final</td><td>Modelo do programa (Word/LaTeX)</td><td>Texto ↔ lista sincronizados</td></tr>
+      <tr><td class="num">8</td><td><b>Entregar</b></td><td>«Atualizar»; exportar Zotero RDF e BibTeX com a versão; backup</td><td>Verificação de DOIs; declaração de uso de IA</td><td>Versão congelada</td></tr>
+    </tbody></table></div>
+    <div class="rule-box rv"><span class="blabel">Regra</span><p>O que decidir em cada etapa (critérios, protocolo, PRISMA) está no manual de Metodologia; o que pode ser delegado à IA em cada etapa (e como registrar) está no manual de IA. Este manual diz <em>onde clicar</em> para que as duas coisas deixem rastro.</p></div>
+  </div>
+</section>
+
+<section class="slide alt" id="s42" data-title="Glossário">
+  <div class="inner">
+    <div class="kicker-part rv">Fechamento<span>4 de 7</span></div>
+    <h2 class="rv">Glossário</h2>
+    <p class="lead rv">Tudo que aparece no manual sem ser explicado no próprio slide. Termos sublinhados no texto abrem estas definições.</p>
+    <div class="gl4 rv"><div><h4 style="margin-top:0">Itens, formatos e identificadores</h4><dl class="gl"><dt>Item</dt><dd>O registro de uma obra no Zotero: tipo, metadados, anexos, notas, etiquetas e relações.</dd><dt>Item pai · anexo</dt><dd>O registro bibliográfico; o arquivo (PDF, EPUB, página salva) ou link ligado a ele. Anexo sem pai não é citável.</dd><dt>Metadado</dt><dd>Cada campo que descreve a obra — autor, título, periódico, ano, volume, páginas, DOI. É o que o estilo formata.</dd><dt>DOI</dt><dd>Digital Object Identifier: identificador persistente de um documento; resolve em doi.org e na Crossref.</dd><dt>ISBN · PMID · arXiv</dt><dd>Identificador de livro; identificador de artigo no PubMed; identificador de preprint no arXiv.</dd><dt>RIS</dt><dd>Formato de intercâmbio bibliográfico em texto, lido por praticamente todas as bases e ferramentas de triagem.</dd><dt>BibTeX · BibLaTeX</dt><dd>Formatos de banco de referências do LaTeX; cada entrada tem uma chave de citação.</dd><dt>CSL JSON</dt><dd>Representação em JSON dos campos de um item, exatamente como o processador de citações os lê.</dd><dt>Chave de citação</dt><dd>Identificador curto de uma entrada BibTeX, como <code>silva2024automacao</code>; com o Better BibTeX, é estável.</dd><dt>CSL</dt><dd>Citation Style Language: linguagem aberta em que os estilos de citação (ABNT, APA…) são escritos; usada por Zotero, Pandoc e outros.</dd><dt>Estilo autor-data · numérico · nota</dt><dd>Sistemas de citação: (AUTOR, ano); [n]; nota de rodapé. A ABNT admite os dois primeiros.</dd><dt>PDF de acesso aberto</dt><dd>Cópia legal e gratuita do texto — publicada, aceita (postprint) ou submetida (preprint).</dd><dt>Unpaywall</dt><dd>Base que localiza cópias de acesso aberto a partir do DOI; o Zotero a consulta em «Encontrar texto completo».</dd></dl></div><div><h4 style="margin-top:0">Organização, programa e serviços</h4><dl class="gl"><dt>Coleção · subcoleção</dt><dd>Agrupamento de itens semelhante a uma playlist: o mesmo item pode estar em várias; remover não apaga.</dd><dt>Etiqueta (tag)</dt><dd>Rótulo transversal atribuído a itens e anotações; até nove podem ter cor e tecla (1–9).</dd><dt>Pesquisa salva</dt><dd>Busca avançada guardada como coleção que se atualiza sozinha.</dd><dt>Nota filha · nota independente</dt><dd>Nota ligada a um item; nota solta na biblioteca, para sínteses de vários itens.</dd><dt>Anotação</dt><dd>Destaque, sublinhado, nota, texto, área ou tinta feita no leitor; fica no banco do Zotero, não no arquivo.</dd><dt>Connector</dt><dd>Extensão do navegador que reconhece a página e envia metadados e PDF ao programa.</dd><dt>Tradutor (translator)</dt><dd>Script que ensina o Connector a ler um site ou o Zotero a importar um formato.</dd><dt>Plugin</dt><dd>Extensão instalada no programa (arquivo .xpi); tem acesso total à biblioteca e ao computador.</dd><dt>Cópia rápida (Quick Copy)</dt><dd>Copiar itens já formatados no estilo escolhido: Ctrl+Shift+A (citação), Ctrl+Shift+C (bibliografia) ou arrastar.</dd><dt>Sincronização de dados · de arquivos</dt><dd>Envio dos itens, notas e anotações ao zotero.org (gratuito, ilimitado); envio dos anexos (cota de 300 MB ou WebDAV).</dd><dt>WebDAV</dt><dd>Protocolo de acesso a arquivos por HTTP; permite guardar os anexos num servidor próprio.</dd><dt>Zotero Storage</dt><dd>Armazenamento de anexos do próprio Zotero; obrigatório para arquivos de grupos.</dd><dt>Grupo</dt><dd>Biblioteca compartilhada com membros, papéis e permissões; privado ou público.</dd><dt>Pasta de dados</dt><dd>Diretório com <code>zotero.sqlite</code> e <code>storage/</code>: é a biblioteca inteira; é o que se copia no backup.</dd><dt>Better BibTeX (BBT)</dt><dd>Plugin que gera chaves estáveis e mantém arquivos .bib atualizados automaticamente.</dd><dt>ZoteroBib</dt><dd>Gerador de bibliografias no navegador (zbib.org), sem conta nem instalação.</dd><dt>API</dt><dd>Interface em api.zotero.org para ler e escrever na biblioteca por programa, com chave de acesso.</dd></dl></div></div>
+  </div>
+</section>
+
+<section class="slide" id="s43" data-title="Referências: documentação do Zotero">
+  <div class="inner">
+    <div class="kicker-part rv">Fechamento<span>5 de 7 · endereços conferidos em 08/09/2026</span></div>
+    <h2 class="rv">Referências — documentação oficial do Zotero</h2>
+    <ol class="refs rv">
+      <li><span class="rt">ZOTERO. Quick Start Guide.</span><a href="https://www.zotero.org/support/quick_start_guide">zotero.org/support/quick_start_guide</a></li>
+      <li><span class="rt">ZOTERO. Download; System requirements.</span><a href="https://www.zotero.org/download/">zotero.org/download</a> · <a href="https://www.zotero.org/support/system_requirements">zotero.org/support/system_requirements</a></li>
+      <li><span class="rt">ZOTERO. Adding items to Zotero.</span><a href="https://www.zotero.org/support/adding_items_to_zotero">zotero.org/support/adding_items_to_zotero</a></li>
+      <li><span class="rt">ZOTERO. Importing standardized formats.</span><a href="https://www.zotero.org/support/kb/importing_standardized_formats">zotero.org/support/kb/importing_standardized_formats</a></li>
+      <li><span class="rt">ZOTERO. Improved PDF retrieval with Unpaywall integration (blog).</span><a href="https://www.zotero.org/blog/improved-pdf-retrieval-with-unpaywall-integration/">zotero.org/blog/improved-pdf-retrieval-with-unpaywall-integration</a></li>
+      <li><span class="rt">ZOTERO. Collections and tags; Duplicate detection.</span><a href="https://www.zotero.org/support/collections_and_tags">zotero.org/support/collections_and_tags</a> · <a href="https://www.zotero.org/support/duplicate_detection">zotero.org/support/duplicate_detection</a></li>
+      <li><span class="rt">ZOTERO. PDF reader; Notes; Keyboard shortcuts.</span><a href="https://www.zotero.org/support/pdf_reader">zotero.org/support/pdf_reader</a> · <a href="https://www.zotero.org/support/notes">zotero.org/support/notes</a> · <a href="https://www.zotero.org/support/kb/keyboard_shortcuts">zotero.org/support/kb/keyboard_shortcuts</a></li>
+      <li><span class="rt">ZOTERO. Styles; Zotero Style Repository; Creating bibliographies.</span><a href="https://www.zotero.org/support/styles">zotero.org/support/styles</a> · <a href="https://www.zotero.org/styles">zotero.org/styles</a> · <a href="https://www.zotero.org/support/creating_bibliographies">zotero.org/support/creating_bibliographies</a></li>
+      <li><span class="rt">ZOTERO. Word processor integration; Plugin usage; Google Docs.</span><a href="https://www.zotero.org/support/word_processor_integration">zotero.org/support/word_processor_integration</a> · <a href="https://www.zotero.org/support/word_processor_plugin_usage">…/word_processor_plugin_usage</a> · <a href="https://www.zotero.org/support/google_docs">…/google_docs</a></li>
+      <li><span class="rt">ZOTERO. Sync; Storage plans; Zotero data directory.</span><a href="https://www.zotero.org/support/sync">zotero.org/support/sync</a> · <a href="https://www.zotero.org/storage">zotero.org/storage</a> · <a href="https://www.zotero.org/support/zotero_data">zotero.org/support/zotero_data</a></li>
+      <li><span class="rt">ZOTERO. Groups.</span><a href="https://www.zotero.org/support/groups">zotero.org/support/groups</a></li>
+      <li><span class="rt">ZOTERO. Plugins for Zotero.</span><a href="https://www.zotero.org/support/plugins">zotero.org/support/plugins</a></li>
+      <li><span class="rt">ZOTERO. Web API v3.</span><a href="https://www.zotero.org/support/dev/web_api/v3/basics">zotero.org/support/dev/web_api/v3/basics</a></li>
+      <li><span class="rt">ZOTERO. Changelog; blog «Zotero 7», «Zotero 8», «Zotero 9», «Zotero 10» (2024–2026).</span><a href="https://www.zotero.org/support/changelog">zotero.org/support/changelog</a> · <a href="https://www.zotero.org/blog/">zotero.org/blog</a></li>
+      <li><span class="rt">ZOTERO. Knowledge base (kb).</span><a href="https://www.zotero.org/support/kb">zotero.org/support/kb</a></li>
+      <li><span class="rt">ZoteroBib — FAQ.</span><a href="https://zbib.org/faq">zbib.org/faq</a></li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide alt" id="s44" data-title="Referências: normas, ferramentas e repositório">
+  <div class="inner">
+    <div class="kicker-part rv">Fechamento<span>6 de 7</span></div>
+    <h2 class="rv">Referências — normas ABNT, ferramentas e repositório público</h2>
+    <div class="two rv">
+      <div>
+        <ol class="refs" start="17">
+          <li><span class="rt">ABNT NBR 10520:2023 — Informação e documentação: citações em documentos: apresentação. Rio de Janeiro: ABNT, 2023. Substitui a de 2002.</span></li>
+          <li><span class="rt">ABNT NBR 6023:2025 — Informação e documentação: referências: elaboração. 3. ed. Rio de Janeiro: ABNT, 2025. Substitui a de 2018.</span></li>
+          <li><span class="rt">CITATION STYLE LANGUAGE. Styles repository — «Associação Brasileira de Normas Técnicas (Português - Brasil)», variantes numérico, note e institucionais.</span><a href="https://github.com/citation-style-language/styles">github.com/citation-style-language/styles</a></li>
+          <li><span class="rt">CITATION STYLE LANGUAGE. Visual CSL Editor.</span><a href="https://editor.citationstyles.org/">editor.citationstyles.org</a></li>
+          <li><span class="rt">HEYNS, E. Better BibTeX for Zotero — documentação e instalação.</span><a href="https://retorque.re/zotero-better-bibtex/">retorque.re/zotero-better-bibtex</a></li>
+          <li><span class="rt">ASREVIEW. ASReview LAB — Data format (RIS, CSV, TSV, XLSX).</span><a href="https://asreview.readthedocs.io/en/latest/lab/data_format.html">asreview.readthedocs.io</a></li>
+          <li><span class="rt">RAYYAN. Intelligent systematic review.</span><a href="https://www.rayyan.ai/">rayyan.ai</a></li>
+          <li><span class="rt">abnTeX2 — classes e pacotes LaTeX para a ABNT; biblatex-abnt.</span><a href="https://www.abntex.net.br/">abntex.net.br</a></li>
+          <li><span class="rt">UNPAYWALL. An open database of free scholarly articles.</span><a href="https://unpaywall.org/">unpaywall.org</a></li>
+        </ol>
+      </div>
+      <div>
+        <div class="case"><span class="blabel">Manual on-line e repositório público</span><p><strong>Manual:</strong> <a href="https://zotero.mirandastech.com.br/">zotero.mirandastech.com.br</a> · <a href="https://zotero.mirandastech.com.br/manual.pdf">PDF</a><br>Deck (HTML autônomo e PDF), capturas datadas de cada tela, o arquivo do estilo ABNT testado, modelos de coleção e de convenção de etiquetas, script de backup e o script de auditoria da biblioteca (sem DOI, sem PDF, título em caixa alta) via API: <a href="https://github.com/joaopaulomirandamatias/zotero-pesquisa-cientifica">github.com/joaopaulomirandamatias/zotero-pesquisa-cientifica</a>.</p><span class="src">Como citar: MIRANDASTECH. Zotero para pesquisa científica: passo a passo. v0.1 (rascunho), set. 2026. CC BY 4.0.</span></div>
+        <div class="tw" style="margin-top:12px"><table><thead><tr><th>Pasta / arquivo</th><th>O que é</th></tr></thead><tbody>
+          <tr><td class="mono">manual/</td><td>Deck em HTML autônomo e PDF</td></tr>
+          <tr><td class="mono">capturas/</td><td>Capturas reais e datadas, nomeadas por slide</td></tr>
+          <tr><td class="mono">modelos/colecoes.md · etiquetas.md</td><td>Estrutura de coleções e convenção de etiquetas para copiar</td></tr>
+          <tr><td class="mono">estilos/</td><td>O .csl ABNT usado nos testes, com a data</td></tr>
+          <tr><td class="mono">scripts/backup_zotero.sh</td><td>Backup datado da pasta de dados</td></tr>
+          <tr><td class="mono">scripts/auditar_biblioteca.py</td><td>Lista, pela API, itens sem DOI, sem PDF, em caixa alta ou como página web</td></tr>
+          <tr><td class="mono">scripts/exportar_bbt.sh</td><td>Exporta uma coleção pelo Better BibTeX (BibTeX, BibLaTeX ou CSL JSON) sem abrir menus</td></tr>
+          <tr><td class="mono">modelos/estilos/ · modelos/exemplo_exportacao/</td><td>Os dois estilos ABNT (.csl) testados; a coleção de exemplo exportada em .bib, BibLaTeX, CSL JSON e a lista ABNT gerada</td></tr>
+          <tr><td class="mono">.claude/agents/bibliotecario.md · .claude/skills/</td><td>Agente <b>Bibliotecário</b> para o Claude Code: guia a configuração, roda a auditoria e conversa com o Metodólogo e o Orientador</td></tr>
+        </tbody></table></div>
+        <div class="colophon" style="margin-top:12px;font-size:11px">Rascunho escrito com assistência de IA (Claude, Anthropic) na estruturação, redação e verificação de fontes, sob as regras do manual de uso de IA. Versão do Zotero, requisitos, planos de armazenamento, atalhos, nomes de estilos e compatibilidade de plugins conferidos nas fontes acima em 08/09/2026. Capturas a substituir pelas reais antes da publicação.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s99" data-title="Os três manuais juntos">
+  <div class="inner">
+    <div class="kicker-part rv">Fechamento · último slide<span>ferramenta + método + uso de IA, na mesma pasta</span></div>
+    <h2 class="rv">Como usar os três manuais juntos</h2>
+    <p class="lead rv">Os manuais de <strong>Metodologia</strong> e de <strong>Uso de IA</strong> têm agentes para o Claude Code — o <em>Metodólogo</em> decide sobre método; o <em>Orientador</em>, sobre o uso de IA. Este manual entra como a camada de ferramenta: é no Zotero que as decisões dos dois deixam rastro — a busca importada com data, a triagem etiquetada, a leitura anotada com página, a citação que a lista reproduz.</p>
+    <div class="two rv">
+      <div>
+        <div class="code"><div class="code-head">instalação dos repositórios irmãos — uma vez, em qualquer ordem</div><pre><span class="k">$</span> git clone https://github.com/joaopaulomirandamatias/metodologia-pesquisa-cientifica.git
+<span class="k">$</span> git clone https://github.com/joaopaulomirandamatias/ia-na-pesquisa-cientifica.git
+<span class="k">$</span> git clone https://github.com/joaopaulomirandamatias/zotero-pesquisa-cientifica.git
+<span class="k">$</span> bash metodologia-pesquisa-cientifica/scripts/instalar_skills.sh    <span class="cm"># agente metodologo</span>
+<span class="k">$</span> bash ia-na-pesquisa-cientifica/scripts/instalar_skills.sh          <span class="cm"># agente orientador</span>
+<span class="k">$</span> bash zotero-pesquisa-cientifica/scripts/instalar_skills.sh       <span class="cm"># agente bibliotecario</span>
+
+<span class="cm"># na pasta do projeto criada por qualquer um dos dois:</span>
+<span class="k">$</span> python3 zotero-pesquisa-cientifica/scripts/auditar_biblioteca.py --colecao "Dissertação 2026"</pre></div>
+        <div class="tw"><table><thead><tr><th>Pergunta</th><th>Quem responde</th></tr></thead><tbody>
+          <tr><td>«Qual método? Quantas entrevistas? Está na ABNT?»</td><td><span class="pill p-blue">Metodólogo</span> · manual de Metodologia</td></tr>
+          <tr><td>«Posso usar IA nisto? Como declaro?»</td><td><span class="pill p-amber">Orientador</span> · manual de IA</td></tr>
+          <tr><td>«Onde clico? Por que a referência saiu errada?»</td><td><span class="pill p-go">este manual</span></td></tr>
+        </tbody></table></div>
+      </div>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:150px">Etapa</th><th>Metodologia decide</th><th>IA delega ou não</th><th>Zotero registra</th></tr></thead><tbody>
+          <tr><td><b>Busca</b></td><td>Bases, string, critérios</td><td>Sugestão de termos, com registro</td><td>Coleção por base e data; total</td></tr>
+          <tr><td><b>Triagem</b></td><td>Critérios de inclusão; dois revisores</td><td>Triagem assistida com status preliminar</td><td>RIS exportado e reimportado; etiquetas por revisor</td></tr>
+          <tr><td><b>Leitura</b></td><td>Fichamento com página; matriz de síntese</td><td>Resumo de apoio, nunca substituto da leitura</td><td>Anotações, notas extraídas, CSV da matriz</td></tr>
+          <tr><td><b>Escrita</b></td><td>NBR 10520 e 6023; estrutura</td><td>Revisão de forma; declaração de uso</td><td>Citações vivas; lista gerada; versão exportada</td></tr>
+        </tbody></table></div>
+        <div class="rule-box"><span class="blabel">Regra dos três</span><p>Nenhum manual substitui o outro: decidir (Metodologia), delegar (IA) e registrar (Zotero) são três ações distintas sobre a mesma etapa. Manual de IA: <a href="https://manual.mirandastech.com.br/">manual.mirandastech.com.br</a> · Metodologia: <a href="https://metodologia.mirandastech.com.br/">metodologia.mirandastech.com.br</a> · este: <a href="https://zotero.mirandastech.com.br/">zotero.mirandastech.com.br</a>.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<script>
+
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var tot = slides.length; document.getElementById('tot').textContent = tot; var ns = document.getElementById('nslides'); if (ns) ns.textContent = tot;
+  var cur = document.getElementById('cur'), prog = document.getElementById('prog');
+  var menu = document.getElementById('menu'), scrim = document.getElementById('scrim'), menubtn = document.getElementById('menubtn');
+
+  /* sumário gerado a partir dos slides */
+  var html = '', grp = '';
+  slides.forEach(function(s, i){
+    var t = s.getAttribute('data-title') || ('Slide ' + (i+1));
+    if (s.classList.contains('divider')) { html += '<div class="grp">' + t + '</div>'; return; }
+    if (s.classList.contains('cover')) { html += '<div class="grp">Início</div>'; }
+    html += '<a href="#' + s.id + '" data-i="' + i + '"><span class="n">' + String(i+1).padStart(2,'0') + '</span><span>' + t + '</span></a>';
+  });
+  document.getElementById('menulist').innerHTML = html;
+  document.getElementById('menuclose').addEventListener('click', function(){ toggleMenu(false); });
+  var links = Array.prototype.slice.call(menu.querySelectorAll('a'));
+  function toggleMenu(open){ menu.classList.toggle('open', open); scrim.classList.toggle('on', open); }
+  menubtn.addEventListener('click', function(){ toggleMenu(!menu.classList.contains('open')); });
+  scrim.addEventListener('click', function(){ toggleMenu(false); });
+  links.forEach(function(a){ a.addEventListener('click', function(){ toggleMenu(false); }); });
+
+  /* slide ativo: contador, progresso, revelação, sumário */
+  var active = 0;
+  function setActive(i){
+    active = i; cur.textContent = i + 1; prog.style.width = ((i+1)/tot*100) + '%';
+    links.forEach(function(a){ a.classList.toggle('on', +a.getAttribute('data-i') === i); });
+    var on = menu.querySelector('a.on'); if (on && menu.classList.contains('open')) on.scrollIntoView({block:'nearest'});
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.12 });
+    slides.forEach(function(s){ io.observe(s); });
+  } else { slides.forEach(function(s){ s.classList.add('in'); }); }
+  /* slide ativo = o que ocupa mais área visível */
+  var ticking = false;
+  function recompute(){
+    ticking = false; var vh = window.innerHeight, best = 0, bi = active;
+    slides.forEach(function(s, i){ var r = s.getBoundingClientRect(); var vis = Math.min(r.bottom, vh) - Math.max(r.top, 0); if (vis > best) { best = vis; bi = i; } });
+    if (bi !== active) setActive(bi);
+  }
+  window.addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(recompute); } }, { passive: true });
+  window.addEventListener('resize', recompute); recompute(); slides[0].classList.add('in');
+
+  /* ajuste de escala: cada slide cabe na tela (como num programa de apresentação) */
+  function fitAll(){
+    if (window.innerWidth <= 900) { slides.forEach(function(s){ var i = s.querySelector('.inner'); if (i) i.style.zoom = ''; s.classList.add('fit'); }); return; }
+    var avail = window.innerHeight - 52;
+    slides.forEach(function(s){
+      var inner = s.querySelector('.inner'); if (!inner || s.classList.contains('divider') || s.classList.contains('cover')) return;
+      inner.style.zoom = '1'; s.classList.remove('fit');
+      var need = inner.scrollHeight; if (need <= avail) { s.classList.add('fit'); return; }
+      var z = Math.max(0.75, avail / need); inner.style.zoom = z.toFixed(3);
+      if (inner.scrollHeight * z <= avail + 2) s.classList.add('fit');
+    });
+  }
+  window.addEventListener('resize', fitAll); window.addEventListener('load', fitAll); fitAll();
+  /* cards expansíveis abrem em janela sobreposta, sem mudar a altura do slide */
+  var modal = document.getElementById('modal'), mbody = document.getElementById('modal-body'), mtitle = document.getElementById('modal-title');
+  function closeModal(){ modal.classList.remove('on'); mbody.innerHTML = ''; }
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  modal.addEventListener('click', function(ev){ if (ev.target === modal) closeModal(); });
+  document.querySelectorAll('details.more').forEach(function(d){
+    var s = d.querySelector('summary'), body = d.querySelector(':scope > div');
+    s.addEventListener('click', function(ev){
+      if (window.matchMedia('print').matches) return;
+      ev.preventDefault(); d.open = false;
+      mtitle.textContent = s.textContent.replace(/^detalhes\s*—\s*/i, '').trim() || 'detalhes';
+      mbody.innerHTML = body.innerHTML; modal.classList.add('on'); attachCopy(mbody);
+    });
+  });
+  /* botão de copiar em código, terminal e prompt */
+  function attachCopy(root){
+    root.querySelectorAll('.code, .term').forEach(function(box){
+      if (box.querySelector(':scope > .copy')) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'copy'; b.textContent = 'copiar'; b.setAttribute('aria-label', 'Copiar conteúdo');
+      b.addEventListener('click', function(){
+        var pre = box.querySelector('pre'); var txt = pre ? pre.innerText : box.innerText;
+        function done(){ b.textContent = 'copiado ✓'; b.classList.add('ok'); setTimeout(function(){ b.textContent = 'copiar'; b.classList.remove('ok'); }, 1600); }
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(done, function(){ fallback(txt); done(); }); } else { fallback(txt); done(); }
+      });
+      box.appendChild(b);
+    });
+  }
+  function fallback(txt){ var ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e){} document.body.removeChild(ta); }
+  attachCopy(document);
+  /* popover do glossário */
+  var gpop = document.getElementById('gpop'), gcur = null;
+  function showPop(el){ gpop.innerHTML = '<b>' + el.getAttribute('data-t') + '</b>' + el.getAttribute('data-d'); gpop.classList.add('on');
+    var r = el.getBoundingClientRect(), pw = Math.min(340, window.innerWidth - 24); gpop.style.maxWidth = pw + 'px';
+    var left = Math.max(12, Math.min(r.left, window.innerWidth - pw - 12)); gpop.style.left = left + 'px';
+    var ph = gpop.offsetHeight; var top = r.bottom + 8; if (top + ph > window.innerHeight - 8) top = Math.max(8, r.top - ph - 8); gpop.style.top = top + 'px'; gcur = el; }
+  function hidePop(){ gpop.classList.remove('on'); gcur = null; }
+  document.querySelectorAll('.gterm').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ showPop(el); }); el.addEventListener('mouseleave', hidePop);
+    el.addEventListener('focus', function(){ showPop(el); }); el.addEventListener('blur', hidePop);
+    el.addEventListener('click', function(ev){ ev.stopPropagation(); if (gcur === el) hidePop(); else showPop(el); });
+  });
+  document.addEventListener('click', function(){ if (gcur) hidePop(); }); window.addEventListener('scroll', function(){ if (gcur) hidePop(); }, { passive: true });
+
+  function go(i){ i = Math.max(0, Math.min(tot-1, i)); window.scrollTo({ top: slides[i].offsetTop, behavior: 'smooth' }); }
+  document.getElementById('prev').addEventListener('click', function(){ go(active-1); });
+  document.getElementById('next').addEventListener('click', function(){ go(active+1); });
+  document.addEventListener('keydown', function(ev){
+    if (ev.target && /input|textarea|select/i.test(ev.target.tagName)) return;
+    if (ev.key === 'ArrowDown' || ev.key === 'PageDown' || ev.key === ' ' || ev.key === 'ArrowRight') { ev.preventDefault(); go(active+1); }
+    else if (ev.key === 'ArrowUp' || ev.key === 'PageUp' || ev.key === 'ArrowLeft') { ev.preventDefault(); go(active-1); }
+    else if (ev.key === 'Home') { go(0); } else if (ev.key === 'End') { go(tot-1); }
+    else if (ev.key === 'Escape') { toggleMenu(false); closeModal(); }
+  });
+
+  /* checklist — conveniência por leitor, só neste navegador */
+  var KEY = 'mirandastech-zotero-checklist-v1';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#checklist input[type=checkbox]'));
+  var status = document.getElementById('check-status');
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ return {}; } }
+  function save(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+  function paint(){ var n = 0; boxes.forEach(function(b){ var it = b.closest('.check-item'); if (b.checked) { n++; it.classList.add('done'); } else { it.classList.remove('done'); } }); if (status) status.textContent = n + ' de ' + boxes.length; }
+  var st = load(); boxes.forEach(function(b){ b.checked = !!st[b.id]; b.addEventListener('change', function(){ var s = load(); s[b.id] = b.checked; save(s); paint(); }); }); paint();
+  var reset = document.getElementById('check-reset'); if (reset) reset.addEventListener('click', function(){ boxes.forEach(function(b){ b.checked = false; }); save({}); paint(); });
+})();
+</script>
