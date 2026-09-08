@@ -23,7 +23,7 @@ O repositório é ao mesmo tempo um **plugin do Claude Code** (agente + skill + 
 
 | Cliente | Instalar | Usar |
 |---|---|---|
-| **Claude Code** (plugin) | `/plugin marketplace add joaopaulomirandamatias/zotero-pesquisa-cientifica` → `/plugin install zotero-pesquisa@mirandastech` | «Bibliotecário, auditar minha biblioteca» — o agente usa o conector |
+| **Claude Code** (plugin) | `/plugin marketplace add joaopaulomirandamatias/zotero-pesquisa-cientifica` → `/plugin install zotero-pesquisa@mirandastech-zotero` | «Bibliotecário, auditar minha biblioteca» — o agente usa o conector |
 | **Claude Code** (sem plugin) | `bash scripts/instalar_claude.sh` (registra o MCP no escopo do usuário e copia agente e skill para `~/.claude`) | idem |
 | **Claude Desktop** | o mesmo `instalar_claude.sh` acrescenta `zotero` em `claude_desktop_config.json`; reinicie o app | as ferramentas aparecem no menu de conectores |
 | **Codex** (CLI e app) | `bash scripts/instalar_codex.sh` (`codex mcp add zotero …` + prompt `/bibliotecario` em `~/.codex/prompts`) | `/bibliotecario auditar a coleção "X"`; na pasta do repositório o Codex lê `AGENTS.md` |

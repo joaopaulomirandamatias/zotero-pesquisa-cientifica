@@ -1284,7 +1284,7 @@ Como mostra <span class="k">\citeonline</span>{silva2024automacao}, …      <sp
         </tbody></table></div>
         <ol>
           <li>Zotero aberto; Configurações → Avançado → «Permitir que outros aplicativos neste computador se comuniquem com o Zotero» (slide 39).</li>
-          <li><b>Claude Code</b>: <code>/plugin marketplace add joaopaulomirandamatias/zotero-pesquisa-cientifica</code> → <code>/plugin install zotero-pesquisa@mirandastech</code> (agente Bibliotecário + skill + conector), ou <code>scripts/instalar_claude.sh</code>.</li>
+          <li><b>Claude Code</b>: <code>/plugin marketplace add joaopaulomirandamatias/zotero-pesquisa-cientifica</code> → <code>/plugin install zotero-pesquisa@mirandastech-zotero</code> (agente Bibliotecário + skill + conector), ou <code>scripts/instalar_claude.sh</code>.</li>
           <li><b>Claude Desktop</b>: o mesmo script registra o conector em <code>claude_desktop_config.json</code>; reinicie o app.</li>
           <li><b>Codex</b> (app e CLI): <code>scripts/instalar_codex.sh</code> — registra em <code>~/.codex/config.toml</code> e instala o prompt <code>/bibliotecario</code>; na pasta do repositório o Codex lê o <code>AGENTS.md</code>.</li>
         </ol>
@@ -1600,7 +1600,7 @@ styles/  translators/  <span class="cm"># estilos CSL e tradutores instalados</s
           <tr><td class="mono">modelos/</td><td>Estrutura de coleções e convenção de etiquetas; os dois estilos ABNT (.csl) testados; a coleção de exemplo em .bib, BibLaTeX, CSL JSON e a lista ABNT gerada</td></tr>
           <tr><td class="mono">scripts/</td><td>auditar_biblioteca.py (pendências pela API), exportar_bbt.sh (Better BibTeX), backup_zotero.sh (backup datado), gerar_deck.py</td></tr>
           <tr><td class="mono">scripts/zotero_mcp.py · .mcp.json · AGENTS.md</td><td>Conector MCP da biblioteca (7 ferramentas, só leitura); declaração no plugin; instruções para o Codex</td></tr>
-          <tr><td class="mono">.claude-plugin/ · agents/ · skills/</td><td>Plugin do Claude Code (<code>/plugin install zotero-pesquisa@mirandastech</code>): agente <b>Bibliotecário</b>, skill e conector; instaladores <code>instalar_claude.sh</code> e <code>instalar_codex.sh</code></td></tr>
+          <tr><td class="mono">.claude-plugin/ · agents/ · skills/</td><td>Plugin do Claude Code (<code>/plugin install zotero-pesquisa@mirandastech-zotero</code>): agente <b>Bibliotecário</b>, skill e conector; instaladores <code>instalar_claude.sh</code> e <code>instalar_codex.sh</code></td></tr>
         </tbody></table></div>
         <div class="colophon" style="margin-top:12px;font-size:11px">Rascunho escrito com assistência de IA (Claude, Anthropic) na estruturação, redação e verificação de fontes, sob as regras do manual de uso de IA. Versão do Zotero, requisitos, planos de armazenamento, atalhos, nomes de estilos e compatibilidade de plugins conferidos nas fontes acima em 08/09/2026. Capturas a substituir pelas reais antes da publicação.</div>
       </div>

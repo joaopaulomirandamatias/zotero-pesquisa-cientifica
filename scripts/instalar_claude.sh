@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Registra o conector MCP «zotero» e instala agente + skill no Claude Code (escopo do usuário) e,
 # se existir, no Claude Desktop. Alternativa sem este script: no Claude Code,
-#   /plugin marketplace add joaopaulomirandamatias/zotero-pesquisa-cientifica  →  /plugin install zotero-pesquisa@mirandastech
+#   /plugin marketplace add joaopaulomirandamatias/zotero-pesquisa-cientifica  →  /plugin install zotero-pesquisa@mirandastech-zotero
 set -e
 AQUI="$(cd "$(dirname "$0")/.." && pwd)"; SRV="$AQUI/scripts/zotero_mcp.py"
 command -v uv >/dev/null || { echo "Instale o uv (https://docs.astral.sh/uv/) ou troque o comando por: python3 -m pip install mcp && python3 $SRV"; exit 1; }
