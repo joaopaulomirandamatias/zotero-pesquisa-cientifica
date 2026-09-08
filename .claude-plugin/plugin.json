@@ -1,0 +1,10 @@
+{
+  "name": "zotero-pesquisa",
+  "description": "Bibliotecário do Zotero para pesquisa científica: agente, skill e conector MCP da biblioteca local (buscar itens, referências ABNT, auditoria, exportação Better BibTeX). Manual em https://zotero.mirandastech.com.br/",
+  "version": "1.1.0",
+  "author": { "name": "MirandasTech", "url": "https://mirandastech.com.br" },
+  "homepage": "https://zotero.mirandastech.com.br/",
+  "repository": "https://github.com/joaopaulomirandamatias/zotero-pesquisa-cientifica",
+  "license": "CC-BY-4.0",
+  "keywords": ["zotero", "referencias", "abnt", "pesquisa", "mcp"]
+}

@@ -19,6 +19,8 @@ jobs:
           PY
       - name: Scripts íntegros
         run: |
-          python3 -m py_compile scripts/auditar_biblioteca.py
+          python3 -m py_compile scripts/auditar_biblioteca.py scripts/zotero_mcp.py
+          python3 -c "import json;[json.load(open(f)) for f in ['.claude-plugin/plugin.json','.claude-plugin/marketplace.json','.mcp.json']];print('manifestos ok')"
+          bash -n scripts/instalar_claude.sh scripts/instalar_codex.sh
           bash -n scripts/backup_zotero.sh scripts/exportar_bbt.sh scripts/instalar_skills.sh
           python3 -c "import xml.dom.minidom,glob; [xml.dom.minidom.parse(f) for f in glob.glob('modelos/estilos/*.csl')]; print('csl ok')"

@@ -3,8 +3,8 @@
 set -e
 AQUI="$(cd "$(dirname "$0")/.." && pwd)"
 mkdir -p ~/.claude/skills ~/.claude/agents
-cp -r "$AQUI/.claude/skills/bibliotecario-zotero" ~/.claude/skills/
-cp "$AQUI/.claude/agents/bibliotecario.md" ~/.claude/agents/
+cp -r "$AQUI/skills/bibliotecario-zotero" ~/.claude/skills/
+cp "$AQUI/agents/bibliotecario.md" ~/.claude/agents/
 echo "instalado: $(ls ~/.claude/agents | tr '\n' ' ')"
 for a in metodologo orientador; do [ -f ~/.claude/agents/$a.md ] && echo "· $a também instalado" ; done
 echo; echo "No Claude Code, na pasta do projeto: \"Bibliotecário, auditar minha biblioteca\" (com o Zotero aberto)."

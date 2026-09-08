@@ -1274,6 +1274,55 @@ Como mostra <span class="k">\citeonline</span>{silva2024automacao}, …      <sp
   </div>
 </section>
 
+<section class="slide" id="s33a" data-title="Conector MCP: Claude e Codex">
+  <div class="inner">
+    <div class="kicker-part rv">Exportar<span>3b de 5 · conector testado em 08/09/2026</span></div>
+    <h2 class="rv">O conector: a biblioteca dentro do Claude e do Codex</h2>
+    <p class="lead rv">O repositório do manual traz um <b>servidor MCP</b> (Model Context Protocol, o padrão aberto de ferramentas para assistentes de IA) que lê a biblioteca pela API local do Zotero e a expõe a qualquer cliente: Claude Code, Claude Desktop, Codex e outros. Só lê — nunca altera um item.</p>
+    <div class="two rv">
+      <figure><div class="shot"><img src="capturas/conector_terminal.jpg" width="1440" height="900" alt="Terminal com a instalação do conector no Claude Code, no Claude Desktop e no Codex, e a saída real das ferramentas"></div><figcaption><b>Figura 37</b> Instalação em um comando por cliente e a saída real do conector: sete ferramentas e a bibliografia ABNT formatada pelo próprio Zotero.</figcaption></figure>
+      <div>
+        <div class="tw"><table><thead><tr><th style="width:160px">Ferramenta</th><th>O que devolve</th></tr></thead><tbody>
+          <tr><td class="mono">status</td><td>Se o Zotero está aberto com a API local ligada; totais de itens e coleções</td></tr>
+          <tr><td class="mono">listar_colecoes · buscar_itens · detalhar_item</td><td>Coleções; itens por texto, coleção ou etiqueta; metadados e anexos de um item</td></tr>
+          <tr><td class="mono">referencia_abnt</td><td>Referências ou citações formatadas pelo Zotero no estilo ABNT (ou outro instalado)</td></tr>
+          <tr><td class="mono">auditar</td><td>Itens sem DOI, sem PDF, sem autor ou ano, em caixa alta, página web, duplicados</td></tr>
+          <tr><td class="mono">exportar_bbt</td><td>A coleção em BibTeX, BibLaTeX ou CSL JSON pelo Better BibTeX</td></tr>
+        </tbody></table></div>
+        <ol>
+          <li>Zotero aberto; Configurações → Avançado → «Permitir que outros aplicativos neste computador se comuniquem com o Zotero» (slide 39).</li>
+          <li><b>Claude Code</b>: <code>/plugin marketplace add joaopaulomirandamatias/zotero-pesquisa-cientifica</code> → <code>/plugin install zotero-pesquisa@mirandastech</code> (agente Bibliotecário + skill + conector), ou <code>scripts/instalar_claude.sh</code>.</li>
+          <li><b>Claude Desktop</b>: o mesmo script registra o conector em <code>claude_desktop_config.json</code>; reinicie o app.</li>
+          <li><b>Codex</b> (app e CLI): <code>scripts/instalar_codex.sh</code> — registra em <code>~/.codex/config.toml</code> e instala o prompt <code>/bibliotecario</code>; na pasta do repositório o Codex lê o <code>AGENTS.md</code>.</li>
+        </ol>
+        <div class="rule"><span class="blabel">Regra</span><p>O assistente cita <b>o que o conector encontrou</b>. Se um trabalho não aparece em <code>buscar_itens</code>, ele não está na biblioteca — a resposta certa é «não está», nunca uma referência inventada.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="slide alt" id="s33b" data-title="Plugin oficial do Codex">
+  <div class="inner">
+    <div class="kicker-part rv">Exportar<span>3c de 5 · capturas de 08/09/2026</span></div>
+    <h2 class="rv">No Codex, há também o plugin oficial «Zotero» — instale pelo diretório</h2>
+    <p class="lead rv">O app do Codex (OpenAI) traz um plugin Zotero mantido pela própria OpenAI na categoria «Educação e pesquisa». Ele conversa com o Zotero desktop pela mesma API local: busca na biblioteca, exporta BibTeX, insere chaves de citação em LaTeX ou Markdown e importa referências <em>com a sua aprovação</em>.</p>
+    <div class="three rv">
+      <figure><div class="shot"><img src="capturas/codex_plugins.jpg" width="1584" height="1080" alt="Codex: Configurações → Plug-ins, com Explorar diretório"></div><figcaption><b>Figura 38</b> Codex → Configurações → Plug-ins → «Explorar diretório».</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/codex_diretorio_zotero.jpg" width="1584" height="1080" alt="Diretório de plugins do Codex, categoria Educação e pesquisa, com o Zotero"></div><figcaption><b>Figura 39</b> Categoria «Educação e pesquisa» → Zotero («Find papers and add citations from Zotero»).</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/codex_plugin_instalado.jpg" width="1584" height="1080" alt="Página do plugin Zotero no Codex após instalar: Plugin Zotero instalado, Testar agora"></div><figcaption><b>Figura 40</b> «Instalar plugin» → «Plugin Zotero instalado» → «Testar agora». A habilidade Zotero fica ativa para <code>@Zotero</code>.</figcaption></figure>
+    </div>
+    <div class="two rv">
+      <div class="tw"><table><thead><tr><th>Plugin oficial do Codex (OpenAI)</th><th>Conector deste manual (MCP)</th></tr></thead><tbody>
+        <tr><td>Instala em dois cliques no app; <code>@Zotero</code> no chat</td><td>Um script por cliente; funciona no Claude Code, Claude Desktop, Codex e qualquer cliente MCP</td></tr>
+        <tr><td>Busca, BibTeX, chave de citação em .tex/.md, texto de anexos, importação com aprovação</td><td>Busca, referências no estilo ABNT pelo próprio Zotero, auditoria da biblioteca, exportação Better BibTeX</td></tr>
+        <tr><td>Escreve na biblioteca quando você aprova</td><td>Só leitura — não altera nada</td></tr>
+      </tbody></table></div>
+      <div>
+        <div class="case"><span class="blabel">Como usar os dois</span><p>No Codex, o plugin oficial cuida do dia a dia (<code>@Zotero export my Zotero library to references.bib</code>); o conector do manual entra quando a pergunta é «isto está na ABNT?» ou «o que vai sair errado na lista?» — <code>/bibliotecario auditar a coleção "Dissertação 2026"</code>.</p></div>
+        <div class="trap"><span class="blabel">Armadilha</span><p><strong>Deixar o assistente «completar» a referência.</strong> Qualquer plugin devolve só o que está no item. Metadado incompleto no Zotero gera referência incompleta em todos os clientes; a correção continua sendo no item (slide 18).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="slide alt" id="s33" data-title="ASReview e Rayyan: triagem">
   <div class="inner">
     <div class="kicker-part rv">Exportar<span>4 de 5</span></div>
@@ -1341,7 +1390,7 @@ styles/  translators/  <span class="cm"># estilos CSL e tradutores instalados</s
     <div class="kicker-part rv">Colaborar<span>1 de 2 · valores conferidos em 08/09/2026</span></div>
     <h2 class="rv">Sincronização de dados (grátis, ilimitada) × de arquivos (300 MB grátis)</h2>
     <div class="two rv">
-      <figure><div class="shot"><img src="capturas/web_storage.jpg" width="1440" height="900" alt="Página de planos de armazenamento do Zotero"></div><figcaption><b>Figura 37</b> zotero.org/storage: 300 MB gratuitos; 2 GB por US$ 20/ano; 6 GB por US$ 60/ano; ilimitado por US$ 120/ano. Só os anexos contam.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/web_storage.jpg" width="1440" height="900" alt="Página de planos de armazenamento do Zotero"></div><figcaption><b>Figura 41</b> zotero.org/storage: 300 MB gratuitos; 2 GB por US$ 20/ano; 6 GB por US$ 60/ano; ilimitado por US$ 120/ano. Só os anexos contam.</figcaption></figure>
       <div>
         <div class="tw"><table><thead><tr><th style="width:150px"></th><th>Dados</th><th>Arquivos</th></tr></thead><tbody>
           <tr><td><b>O que é</b></td><td>Itens, notas, anotações, etiquetas, coleções, pesquisas</td><td>PDFs, EPUBs, páginas salvas, imagens</td></tr>
@@ -1366,7 +1415,7 @@ styles/  translators/  <span class="cm"># estilos CSL e tradutores instalados</s
     <div class="kicker-part rv">Colaborar<span>2 de 2</span></div>
     <h2 class="rv">Grupos: uma biblioteca compartilhada — e como usá-la numa revisão</h2>
     <div class="two rv">
-      <figure><div class="shot"><img src="capturas/web_groups.jpg" width="1440" height="900" alt="Página de criação de grupo em zotero.org"></div><figcaption><b>Figura 38</b> zotero.org/groups → «Create a New Group» (ou, no programa, Arquivo → Nova biblioteca → Novo grupo…): nome e tipo. Depois, em «Group Settings», as permissões.</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/web_groups.jpg" width="1440" height="900" alt="Página de criação de grupo em zotero.org"></div><figcaption><b>Figura 42</b> zotero.org/groups → «Create a New Group» (ou, no programa, Arquivo → Nova biblioteca → Novo grupo…): nome e tipo. Depois, em «Group Settings», as permissões.</figcaption></figure>
       <div>
         <div class="tw"><table><thead><tr><th style="width:150px">Tipo</th><th>Quem vê</th><th>Quem entra</th><th>Arquivos</th></tr></thead><tbody>
           <tr><td><b>Privado</b></td><td>Só membros</td><td>Por convite</td><td>Sim</td></tr>
@@ -1394,9 +1443,9 @@ styles/  translators/  <span class="cm"># estilos CSL e tradutores instalados</s
     <h2 class="rv">Instalar plugins com segurança</h2>
     <p class="lead rv">Um plugin tem acesso total à sua biblioteca e ao seu computador. O projeto Zotero não mantém uma lista oficial (um diretório está planejado); os plugins são anunciados no fórum e vivem no GitHub dos autores. Instale só de fontes que você conhece.</p>
     <div class="two rv">
-      <figure><div class="shot"><img src="capturas/43_plugins_janela.jpg" width="1440" height="900" alt="Janela Ferramentas → Extensões do Zotero"></div><figcaption><b>Figura 39</b> Ferramentas → Extensões: lista dos instalados, ativar/desativar, remover; engrenagem → «Instalar plugin a partir de arquivo…» e «Verificar atualizações».</figcaption></figure>
+      <figure><div class="shot"><img src="capturas/43_plugins_janela.jpg" width="1440" height="900" alt="Janela Ferramentas → Extensões do Zotero"></div><figcaption><b>Figura 43</b> Ferramentas → Extensões: lista dos instalados, ativar/desativar, remover; engrenagem → «Instalar plugin a partir de arquivo…» e «Verificar atualizações».</figcaption></figure>
       <div>
-        <figure><div class="shot"><img src="capturas/web_plugins.jpg" width="1440" height="900" alt="Página de documentação de plugins do Zotero"></div><figcaption><b>Figura 40</b> zotero.org/support/plugins: o aviso oficial — «instale apenas plugins de desenvolvedores em quem você confia».</figcaption></figure>
+        <figure><div class="shot"><img src="capturas/web_plugins.jpg" width="1440" height="900" alt="Página de documentação de plugins do Zotero"></div><figcaption><b>Figura 44</b> zotero.org/support/plugins: o aviso oficial — «instale apenas plugins de desenvolvedores em quem você confia».</figcaption></figure>
         <ol>
           <li>Vá ao repositório GitHub do plugin → «Releases» → baixe o <code>.xpi</code> mais recente (Firefox: botão direito → salvar).</li>
           <li>Confira no README a versão do Zotero suportada — os ciclos curtos desde 2026 deixam plugins para trás.</li>
@@ -1554,15 +1603,11 @@ styles/  translators/  <span class="cm"># estilos CSL e tradutores instalados</s
       <div>
         <div class="case"><span class="blabel">Manual on-line e repositório público</span><p><strong>Manual:</strong> <a href="https://zotero.mirandastech.com.br/">zotero.mirandastech.com.br</a> · <a href="https://zotero.mirandastech.com.br/manual.pdf">PDF</a><br>Deck (HTML autônomo e PDF), capturas datadas de cada tela, o arquivo do estilo ABNT testado, modelos de coleção e de convenção de etiquetas, script de backup e o script de auditoria da biblioteca (sem DOI, sem PDF, título em caixa alta) via API: <a href="https://github.com/joaopaulomirandamatias/zotero-pesquisa-cientifica">github.com/joaopaulomirandamatias/zotero-pesquisa-cientifica</a>.</p><span class="src">Como citar: MIRANDASTECH. Zotero para pesquisa científica: passo a passo. v0.1 (rascunho), set. 2026. CC BY 4.0.</span></div>
         <div class="tw" style="margin-top:12px"><table><thead><tr><th>Pasta / arquivo</th><th>O que é</th></tr></thead><tbody>
-          <tr><td class="mono">manual/</td><td>Deck em HTML autônomo e PDF</td></tr>
-          <tr><td class="mono">capturas/</td><td>Capturas reais e datadas, nomeadas por slide</td></tr>
-          <tr><td class="mono">modelos/colecoes.md · etiquetas.md</td><td>Estrutura de coleções e convenção de etiquetas para copiar</td></tr>
-          <tr><td class="mono">estilos/</td><td>O .csl ABNT usado nos testes, com a data</td></tr>
-          <tr><td class="mono">scripts/backup_zotero.sh</td><td>Backup datado da pasta de dados</td></tr>
-          <tr><td class="mono">scripts/auditar_biblioteca.py</td><td>Lista, pela API, itens sem DOI, sem PDF, em caixa alta ou como página web</td></tr>
-          <tr><td class="mono">scripts/exportar_bbt.sh</td><td>Exporta uma coleção pelo Better BibTeX (BibTeX, BibLaTeX ou CSL JSON) sem abrir menus</td></tr>
-          <tr><td class="mono">modelos/estilos/ · modelos/exemplo_exportacao/</td><td>Os dois estilos ABNT (.csl) testados; a coleção de exemplo exportada em .bib, BibLaTeX, CSL JSON e a lista ABNT gerada</td></tr>
-          <tr><td class="mono">.claude/agents/bibliotecario.md · .claude/skills/</td><td>Agente <b>Bibliotecário</b> para o Claude Code: guia a configuração, roda a auditoria e conversa com o Metodólogo e o Orientador</td></tr>
+          <tr><td class="mono">manual/ · capturas/</td><td>Deck em HTML autônomo e PDF; capturas reais e datadas, nomeadas por passo</td></tr>
+          <tr><td class="mono">modelos/</td><td>Estrutura de coleções e convenção de etiquetas; os dois estilos ABNT (.csl) testados; a coleção de exemplo em .bib, BibLaTeX, CSL JSON e a lista ABNT gerada</td></tr>
+          <tr><td class="mono">scripts/</td><td>auditar_biblioteca.py (pendências pela API), exportar_bbt.sh (Better BibTeX), backup_zotero.sh (backup datado), gerar_deck.py</td></tr>
+          <tr><td class="mono">scripts/zotero_mcp.py · .mcp.json · AGENTS.md</td><td>Conector MCP da biblioteca (7 ferramentas, só leitura); declaração no plugin; instruções para o Codex</td></tr>
+          <tr><td class="mono">.claude-plugin/ · agents/ · skills/</td><td>Plugin do Claude Code (<code>/plugin install zotero-pesquisa@mirandastech</code>): agente <b>Bibliotecário</b>, skill e conector; instaladores <code>instalar_claude.sh</code> e <code>instalar_codex.sh</code></td></tr>
         </tbody></table></div>
         <div class="colophon" style="margin-top:12px;font-size:11px">Rascunho escrito com assistência de IA (Claude, Anthropic) na estruturação, redação e verificação de fontes, sob as regras do manual de uso de IA. Versão do Zotero, requisitos, planos de armazenamento, atalhos, nomes de estilos e compatibilidade de plugins conferidos nas fontes acima em 08/09/2026. Capturas a substituir pelas reais antes da publicação.</div>
       </div>
@@ -1582,7 +1627,8 @@ styles/  translators/  <span class="cm"># estilos CSL e tradutores instalados</s
 <span class="k">$</span> git clone https://github.com/joaopaulomirandamatias/zotero-pesquisa-cientifica.git
 <span class="k">$</span> bash metodologia-pesquisa-cientifica/scripts/instalar_skills.sh    <span class="cm"># agente metodologo</span>
 <span class="k">$</span> bash ia-na-pesquisa-cientifica/scripts/instalar_skills.sh          <span class="cm"># agente orientador</span>
-<span class="k">$</span> bash zotero-pesquisa-cientifica/scripts/instalar_skills.sh       <span class="cm"># agente bibliotecario</span>
+<span class="k">$</span> bash zotero-pesquisa-cientifica/scripts/instalar_claude.sh       <span class="cm"># bibliotecario + conector (Claude)</span>
+<span class="k">$</span> bash zotero-pesquisa-cientifica/scripts/instalar_codex.sh        <span class="cm"># conector + /bibliotecario (Codex)</span>
 
 <span class="cm"># na pasta do projeto criada por qualquer um dos dois:</span>
 <span class="k">$</span> python3 zotero-pesquisa-cientifica/scripts/auditar_biblioteca.py --colecao "Dissertação 2026"</pre></div>

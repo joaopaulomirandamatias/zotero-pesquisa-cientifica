@@ -1,0 +1,14 @@
+{
+  "name": "mirandastech",
+  "owner": { "name": "MirandasTech", "url": "https://mirandastech.com.br" },
+  "metadata": { "description": "Plugins dos manuais MirandasTech de pesquisa científica" },
+  "plugins": [
+    {
+      "name": "zotero-pesquisa",
+      "source": "./",
+      "description": "Bibliotecário do Zotero: agente, skill e conector MCP da biblioteca local (ABNT, auditoria, Better BibTeX)",
+      "version": "1.1.0",
+      "category": "productivity"
+    }
+  ]
+}
